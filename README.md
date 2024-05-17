@@ -89,7 +89,6 @@ def action_function_3():
 
 ### Examples
 Check out the examples directory for sample menu configurations and action implementations.
-### Contributing
-Contributions are welcome! Please read the contribution guidelines for more information.
+
 ### License
 This project is licensed under the MIT License.
