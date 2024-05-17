@@ -1,0 +1,149 @@
+{
+  "title": "Main Menu",
+  "items": [
+    {
+      "title": "File",
+      "submenu": {
+        "title": "File Operations",
+        "items": [
+          {
+            "title": "New",
+            "action": "create_new_file"
+          },
+          {
+            "title": "Open",
+            "action": "open_file"
+          },
+          {
+            "title": "Save",
+            "action": "save_file"
+          },
+          {
+            "title": "Save As",
+            "submenu": {
+              "title": "Save As Options",
+              "items": [
+                {
+                  "title": "Save as Text",
+                  "action": "save_as_text"
+                },
+                {
+                  "title": "Save as JSON",
+                  "action": "save_as_json"
+                },
+                {
+                  "title": "Save as XML",
+                  "action": "save_as_xml"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Exit",
+            "action": "exit_program"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Edit",
+      "submenu": {
+        "title": "Edit Operations",
+        "items": [
+          {
+            "title": "Cut",
+            "action": "cut_text"
+          },
+          {
+            "title": "Copy",
+            "action": "copy_text"
+          },
+          {
+            "title": "Paste",
+            "action": "paste_text"
+          },
+          {
+            "title": "Select All",
+            "action": "select_all_text"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tools",
+      "submenu": {
+        "title": "Tools and Utilities",
+        "items": [
+          {
+            "title": "Settings",
+            "submenu": {
+              "title": "Settings Options",
+              "items": [
+                {
+                  "title": "General Settings",
+                  "action": "open_general_settings"
+                },
+                {
+                  "title": "Advanced Settings",
+                  "action": "open_advanced_settings"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Plugins",
+            "submenu": {
+              "title": "Plugin Management",
+              "items": [
+                {
+                  "title": "Install Plugin",
+                  "action": "install_plugin"
+                },
+                {
+                  "title": "Manage Plugins",
+                  "action": "manage_plugins"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Utilities",
+            "submenu": {
+              "title": "Utility Tools",
+              "items": [
+                {
+                  "title": "Backup",
+                  "action": "perform_backup"
+                },
+                {
+                  "title": "Restore",
+                  "action": "perform_restore"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Help",
+      "submenu": {
+        "title": "Help and Support",
+        "items": [
+          {
+            "title": "User Guide",
+            "action": "open_user_guide"
+          },
+          {
+            "title": "FAQ",
+            "action": "open_faq"
+          },
+          {
+            "title": "About",
+            "action": "show_about"
+          }
+        ]
+      }
+    }
+  ]
+}
