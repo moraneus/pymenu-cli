@@ -1,3 +1,4 @@
+import colorama
 from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -5,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='pymenu-cli',
-    version='1.0.5',
+    version='1.0.6',
     description='A Python library for creating interactive CLI menus',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -13,10 +14,13 @@ setup(
     author_email='moraneus@gmail.com',
     url='https://github.com/moraneus/pymenu-cli',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "colorama",
+        "art"
+    ],
     entry_points={
         'console_scripts': [
-            'pymenu-cli = pymenu_cli.menu:main'
+            'pymenu-cli = pymenu_cli.pymenu:main'
         ]
     },
     license='MIT',

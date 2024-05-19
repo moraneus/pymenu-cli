@@ -1,0 +1,188 @@
+{
+  "banner": {
+    "title": "Pymenu-cli"
+  },
+  "title": "Main Menu",
+  "items": [
+    {
+      "title": "File",
+      "color": {
+        "text": "white",
+        "background": "blue"
+      },
+      "submenu": {
+        "title": "File Operations",
+        "color": {
+          "text": "red",
+          "background": "white"
+        },
+        "items": [
+          {
+            "title": "New",
+            "color": {
+              "text": "red",
+              "background": "black"
+          },
+            "action": "create_new_file"
+          },
+          {
+            "title": "Open",
+            "color": {
+              "text": "blue",
+              "background": "white"
+          },
+            "action": "open_file"
+          },
+          {
+            "title": "Save",
+            "color": {
+              "text": "yellow",
+              "background": "black"
+            },
+            "action": "save_file"
+          },
+          {
+            "title": "Save As",
+            "color": {
+              "text": "yellow",
+              "background": "green"
+            },
+            "submenu": {
+              "title": "Save As Options",
+              "color": {
+                "text": "green",
+                "background": "light_black"
+              },
+              "items": [
+                {
+                  "title": "Save as Text",
+                  "color": {
+                    "text": "green",
+                    "background": "light_black"
+                  },
+                  "action": "save_as_text"
+                },
+                {
+                  "title": "Save as JSON",
+                  "color": {
+                    "text": "green",
+                    "background": "black"
+                  },
+                  "action": "save_as_json"
+                },
+                {
+                  "title": "Save as XML",
+                  "action": "save_as_xml"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Exit",
+            "action": "exit_program"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Edit",
+      "submenu": {
+        "title": "Edit Operations",
+        "items": [
+          {
+            "title": "Cut",
+            "action": "cut_text"
+          },
+          {
+            "title": "Copy",
+            "action": "copy_text"
+          },
+          {
+            "title": "Paste",
+            "action": "paste_text"
+          },
+          {
+            "title": "Select All",
+            "action": "select_all_text"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tools",
+      "submenu": {
+        "title": "Tools and Utilities",
+        "items": [
+          {
+            "title": "Settings",
+            "submenu": {
+              "title": "Settings Options",
+              "items": [
+                {
+                  "title": "General Settings",
+                  "action": "open_general_settings"
+                },
+                {
+                  "title": "Advanced Settings",
+                  "action": "open_advanced_settings"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Plugins",
+            "submenu": {
+              "title": "Plugin Management",
+              "items": [
+                {
+                  "title": "Install Plugin",
+                  "action": "install_plugin"
+                },
+                {
+                  "title": "Manage Plugins",
+                  "action": "manage_plugins"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Utilities",
+            "submenu": {
+              "title": "Utility Tools",
+              "items": [
+                {
+                  "title": "Backup",
+                  "action": "perform_backup"
+                },
+                {
+                  "title": "Restore",
+                  "action": "perform_restore"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Help",
+      "submenu": {
+        "title": "Help and Support",
+        "items": [
+          {
+            "title": "User Guide",
+            "action": "open_user_guide"
+          },
+          {
+            "title": "FAQ",
+            "action": "open_faq"
+          },
+          {
+            "title": "About",
+            "action": "show_about"
+          }
+        ]
+      }
+    }
+  ]
+}
