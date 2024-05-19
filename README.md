@@ -1,6 +1,6 @@
 # pymenu-cli
 
-![PyPI](https://img.shields.io/pypi/v/pymenu-cli?label=pypi%20package)
+![PyPI](https://img.shields.io/pypi/v/pymenu-cli?label=pypi)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pymenu-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -89,7 +89,15 @@ def action_function_3():
 ```
 
 ### Examples
-Check out the examples directory for sample menu configurations and action implementations.
+Explore the examples directory for sample menu configurations and action implementations. 
+To run an example, follow these steps:
+
+1. Clone the project repository.
+2. Open your command line and navigate to the examples directory.
+3. Execute the example by running the following command:
+```python
+python3 menu_example.py
+```
 
 ### License
 This project is licensed under the MIT License.
