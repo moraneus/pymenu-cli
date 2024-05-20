@@ -65,10 +65,21 @@ def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
     for item_data in menu_data['items']:
         if 'submenu' in item_data:
             submenu = create_menu_from_data(item_data['submenu'], actions)
-            menu.add_item(MenuItem(item_data['title'], i_submenu=submenu, i_color=item_data.get('color')))
+            menu.add_item(
+                MenuItem(
+                    item_data['title'],
+                    i_submenu=submenu,
+                    i_color=item_data.get('color')
+                )
+            )
         else:
             menu.add_item(
-                MenuItem(item_data['title'], i_action=item_data.get('action'), i_color=item_data.get('color')))
+                MenuItem(
+                    item_data['title'],
+                    i_action=item_data.get('action'),
+                    i_color=item_data.get('color')
+                )
+            )
 
     return menu
 

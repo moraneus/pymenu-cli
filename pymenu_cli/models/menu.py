@@ -4,7 +4,7 @@ This module defines the Menu class, which represents a text-based menu system.
 
 import os
 import sys
-from typing import Optional, List
+from typing import Optional
 
 import art
 
@@ -29,7 +29,8 @@ class Menu:
 
         Args:
             title (str): The title of the menu.
-            config (Optional[dict]): A dictionary containing optional settings for items, actions, color, and banner.
+            config (Optional[dict]): A dictionary containing optional settings for items,
+                                     actions, color, and banner.
         """
         config = config or {}
         self.__m_title = title
