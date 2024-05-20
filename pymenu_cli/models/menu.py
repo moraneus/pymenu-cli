@@ -1,3 +1,7 @@
+"""
+This module defines the Menu class, which represents a text-based menu system.
+"""
+
 import os
 from typing import Optional, List
 
@@ -5,7 +9,6 @@ import art
 
 from pymenu_cli.UI.styles import Styles, TextColors, BackgroundColors
 from pymenu_cli.models.menu_item import MenuItem
-
 
 class Menu:
     """Represents a menu.
@@ -26,6 +29,8 @@ class Menu:
             i_color: Optional[dict] = None,
             i_banner: Optional[dict] = None):
         """
+        Initialize the Menu instance.
+
         Args:
             i_title (str): The title of the menu.
             i_items (Optional[List[MenuItem]]): A list of items in the menu. Defaults to None.
@@ -69,23 +74,23 @@ class Menu:
 
             if choice == 'B':
                 return
-            elif choice == 'X':
+            if choice == 'X':
                 exit()
-            else:
-                try:
-                    index = int(choice) - 1
-                    if 0 <= index < len(self.__m_items):
-                        selected_item = self.__m_items[index]
-                        if selected_item.submenu:
-                            selected_item.submenu.display()
-                        elif selected_item.action:
-                            getattr(self.__m_actions, selected_item.action)()
-                    else:
-                        raise ValueError
-                except (ValueError, IndexError):
-                    input("\nInvalid choice. Press Enter to try again.")
+            try:
+                index = int(choice) - 1
+                if 0 <= index < len(self.__m_items):
+                    selected_item = self.__m_items[index]
+                    if selected_item.submenu:
+                        selected_item.submenu.display()
+                    elif selected_item.action:
+                        getattr(self.__m_actions, selected_item.action)()
+                else:
+                    raise ValueError
+            except (ValueError, IndexError):
+                input("\nInvalid choice. Press Enter to try again.")
 
     def print_banner(self) -> None:
+        """Prints the banner using the art library."""
         banner_text = self.__m_banner.get('title', '')
         banner_font = self.__m_banner.get('font', 'standard')
         banner = art.text2art(banner_text, font=banner_font, chr_ignore=True)
