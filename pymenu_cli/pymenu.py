@@ -6,12 +6,14 @@ and to associate actions defined in a Python module with the menu items.
 import argparse
 import importlib.util
 import json
+
 from pymenu_cli.models.menu import Menu
 from pymenu_cli.models.menu_item import MenuItem
 
 
 def load_menu(file_path: str, actions_path: str) -> Menu:
-    """Loads a menu from a JSON file.
+    """
+    Loads a menu from a JSON file.
 
     Args:
         file_path (str): The path to the JSON file.
@@ -42,7 +44,8 @@ def load_menu(file_path: str, actions_path: str) -> Menu:
 
 
 def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
-    """Creates a menu from dictionary data.
+    """
+    Creates a menu from dictionary data.
 
     Args:
         menu_data (dict): The menu data.
@@ -58,19 +61,21 @@ def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
         'banner': menu_data.get('banner')
     }
     menu = Menu(menu_data['title'], config=config)
+
     for item_data in menu_data['items']:
         if 'submenu' in item_data:
             submenu = create_menu_from_data(item_data['submenu'], actions)
-            menu.add_item(
-                MenuItem(item_data['title'], i_submenu=submenu, i_color=item_data.get('color')))
+            menu.add_item(MenuItem(item_data['title'], i_submenu=submenu, i_color=item_data.get('color')))
         else:
             menu.add_item(
                 MenuItem(item_data['title'], i_action=item_data.get('action'), i_color=item_data.get('color')))
+
     return menu
 
 
 def load_actions_module(actions_path: str) -> object:
-    """Loads an actions module from a file.
+    """
+    Loads an actions module from a file.
 
     Args:
         actions_path (str): The path to the actions Python file.
@@ -89,7 +94,6 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='pymenu-cli - Create interactive CLI menus')
     parser.add_argument('-m', '--menu', type=str, help='Path to the menu JSON file')
     parser.add_argument('-a', '--actions', type=str, help='Path to the actions Python file')
-
     args = parser.parse_args()
 
     if args.menu and args.actions:
