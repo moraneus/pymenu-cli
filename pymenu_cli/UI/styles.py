@@ -1,9 +1,16 @@
 from enum import Enum
 from colorama import Fore, Style, Back
 
+"""
+Module for defining text and background colors as well as text styles 
+using the colorama library.
+"""
 
 # Used for returning the value from an enum as a string
 class StrEnum(Enum):
+    """
+    Enum class that returns the value as a string.
+    """
     def __str__(self):
         return self.value
 
@@ -12,6 +19,9 @@ class StrEnum(Enum):
 
 
 class TextColors(StrEnum):
+    """
+    Enum for defining text colors using colorama's Fore class.
+    """
     RED = Fore.RED
     LIGHT_RED = Fore.LIGHTRED_EX
     BLUE = Fore.BLUE
@@ -31,6 +41,9 @@ class TextColors(StrEnum):
 
 
 class BackgroundColors(StrEnum):
+    """
+    Enum for defining background colors using colorama's Back class.
+    """
     RED = Back.RED
     LIGHT_RED = Back.LIGHTRED_EX
     BLUE = Back.BLUE
@@ -50,9 +63,13 @@ class BackgroundColors(StrEnum):
 
 
 class Styles(StrEnum):
+    """
+    Enum for defining text styles using colorama's Style class.
+    """
     BRIGHT = Style.BRIGHT
     NORMAL = Style.NORMAL
     DIM = Style.DIM
     RESET_ALL = Style.RESET_ALL
 
-# print(f"{BackgroundColors.WHITE}{TextColors.BLACK}sdfsdfsdfsdf{Styles.RESET_ALL}")
+# Example usage:
+# print(f"{BackgroundColors.WHITE}{TextColors.BLACK}test_text{Styles.RESET_ALL}")
