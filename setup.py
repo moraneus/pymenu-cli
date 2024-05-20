@@ -1,4 +1,5 @@
-import colorama
+"""Module for setting up the pymenu-cli package."""
+
 from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
