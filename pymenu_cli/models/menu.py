@@ -7,7 +7,7 @@ from typing import Optional, List
 
 import art
 
-from pymenu_cli.UI.styles import Styles, TextColors, BackgroundColors
+from pymenu_cli.ui.styles import Styles, TextColors, BackgroundColors
 from pymenu_cli.models.menu_item import MenuItem
 
 class Menu:

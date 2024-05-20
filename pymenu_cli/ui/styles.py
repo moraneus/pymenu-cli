@@ -1,16 +1,17 @@
-from enum import Enum
-from colorama import Fore, Style, Back
-
 """
-Module for defining text and background colors as well as text styles 
+Module for defining text and background colors as well as text styles
 using the colorama library.
 """
 
-# Used for returning the value from an enum as a string
+from enum import Enum
+from colorama import Fore, Style, Back
+
+
 class StrEnum(Enum):
     """
     Enum class that returns the value as a string.
     """
+
     def __str__(self):
         return self.value
 
