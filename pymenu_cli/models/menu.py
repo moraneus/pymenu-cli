@@ -3,12 +3,14 @@ This module defines the Menu class, which represents a text-based menu system.
 """
 
 import os
+import sys
 from typing import Optional, List
 
 import art
 
 from pymenu_cli.ui.styles import Styles, TextColors, BackgroundColors
 from pymenu_cli.models.menu_item import MenuItem
+
 
 class Menu:
     """Represents a menu.
@@ -21,36 +23,28 @@ class Menu:
         __m_banner (Optional[dict]): The banner for the menu.
     """
 
-    def __init__(
-            self,
-            i_title: str,
-            i_items: Optional[List[MenuItem]] = None,
-            i_actions: Optional[object] = None,
-            i_color: Optional[dict] = None,
-            i_banner: Optional[dict] = None):
+    def __init__(self, title: str, config: Optional[dict] = None):
         """
         Initialize the Menu instance.
 
         Args:
-            i_title (str): The title of the menu.
-            i_items (Optional[List[MenuItem]]): A list of items in the menu. Defaults to None.
-            i_actions (Optional[object]): An object containing callable actions. Defaults to None.
-            i_color (Optional[dict]): The color settings for the menu title. Defaults to None.
-            i_banner (Optional[dict]): The banner for the menu. Defaults to None.
+            title (str): The title of the menu.
+            config (Optional[dict]): A dictionary containing optional settings for items, actions, color, and banner.
         """
-        self.__m_title = i_title
-        self.__m_items = i_items or []
-        self.__m_actions = i_actions
-        self.__m_color = i_color
-        self.__m_banner = i_banner
+        config = config or {}
+        self.__m_title = title
+        self.__m_items = config.get('items', [])
+        self.__m_actions = config.get('actions')
+        self.__m_color = config.get('color')
+        self.__m_banner = config.get('banner')
 
-    def add_item(self, i_item: MenuItem) -> None:
+    def add_item(self, item: MenuItem) -> None:
         """Adds an item to the menu.
 
         Args:
-            i_item (MenuItem): The item to add.
+            item (MenuItem): The item to add.
         """
-        self.__m_items.append(i_item)
+        self.__m_items.append(item)
 
     def display(self) -> None:
         """Displays the menu and handles user input."""
@@ -75,7 +69,7 @@ class Menu:
             if choice == 'B':
                 return
             if choice == 'X':
-                exit()
+                sys.exit()
             try:
                 index = int(choice) - 1
                 if 0 <= index < len(self.__m_items):
@@ -97,17 +91,17 @@ class Menu:
         print(banner)
 
     @staticmethod
-    def get_color_string(i_color: Optional[dict]) -> str:
+    def get_color_string(color: Optional[dict]) -> str:
         """Gets the color string based on the provided color settings.
 
         Args:
-            i_color (Optional[dict]): The color settings.
+            color (Optional[dict]): The color settings.
 
         Returns:
             str: The color string.
         """
-        if i_color:
-            text_color = getattr(TextColors, i_color.get('text', 'WHITE').upper())
-            background_color = getattr(BackgroundColors, i_color.get('background', 'BLACK').upper())
+        if color:
+            text_color = getattr(TextColors, color.get('text', 'WHITE').upper())
+            background_color = getattr(BackgroundColors, color.get('background', 'BLACK').upper())
             return f"{text_color}{background_color}"
         return ""

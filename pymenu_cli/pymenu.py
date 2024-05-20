@@ -46,11 +46,13 @@ def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
     Returns:
         Menu: The created menu.
     """
-    menu = Menu(
-        menu_data['title'],
-        i_actions=actions,
-        i_color=menu_data.get('color'),
-        i_banner=menu_data.get('banner'))
+    config = {
+        'items': [],
+        'actions': actions,
+        'color': menu_data.get('color'),
+        'banner': menu_data.get('banner')
+    }
+    menu = Menu(menu_data['title'], config=config)
     for item_data in menu_data['items']:
         if 'submenu' in item_data:
             submenu = create_menu_from_data(item_data['submenu'], actions)
