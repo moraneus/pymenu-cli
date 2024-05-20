@@ -1,3 +1,8 @@
+"""
+This module provides functionality to load and display menus from JSON files,
+and to associate actions defined in a Python module with the menu items.
+"""
+
 import argparse
 import importlib.util
 import json
@@ -21,17 +26,17 @@ def load_menu(file_path: str, actions_path: str) -> Menu:
         FileNotFoundError: If the actions Python file is not found.
     """
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             menu_data = json.load(file)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Menu JSON file not found: {file_path}")
-    except json.JSONDecodeError as e:
-        raise json.JSONDecodeError(f"Invalid JSON format in menu file: {e}", e.doc, e.pos)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Menu JSON file not found: {file_path}") from exc
+    except json.JSONDecodeError as exc:
+        raise json.JSONDecodeError(f"Invalid JSON format in menu file: {exc.msg}", exc.doc, exc.pos)
 
     try:
         actions = load_actions_module(actions_path)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Actions Python file not found: {actions_path}")
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Actions Python file not found: {actions_path}") from exc
 
     return create_menu_from_data(menu_data, actions)
 
