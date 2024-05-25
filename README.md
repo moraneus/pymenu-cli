@@ -6,10 +6,7 @@
 
 pymenu-cli is a Python library that simplifies the creation of interactive command-line interface (CLI) menus. It provides a convenient way to define hierarchical menu structures and associate actions with menu items.
 
-<video width="320" height="240" autoplay loop muted>
-  <source src="docs/example.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Alt Text](https://github.com/moraneus/pymenu-cli/blob/main/docs/example.gif)
 
 
 
