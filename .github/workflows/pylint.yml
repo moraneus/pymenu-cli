@@ -21,5 +21,3 @@ jobs:
     - name: Analyse the code with Pylint
       run: |
         pylint $(git ls-files '*.py' ':!examples/**')
-      env:
-        PERSONAL_ACCESS_TOKEN: ${{ secrets.SECRET }}

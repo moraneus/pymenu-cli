@@ -21,5 +21,3 @@ jobs:
     - name: Run tests with pytest
       run: |
         pytest
-      env:
-        PERSONAL_ACCESS_TOKEN: ${{ secrets.SECRET }}
