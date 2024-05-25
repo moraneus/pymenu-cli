@@ -4,7 +4,7 @@ This module defines the Menu class, which represents a text-based menu system.
 
 import os
 import sys
-from typing import Optional
+from typing import Optional, List, Dict
 
 import art
 
@@ -19,25 +19,75 @@ class Menu:
         __m_title (str): The title of the menu.
         __m_items (List[MenuItem]): A list of items in the menu.
         __m_actions (Optional[object]): An object containing callable actions.
-        __m_color (Optional[dict]): The color settings for the menu title.
-        __m_banner (Optional[dict]): The banner for the menu.
+        __m_color (Optional[Dict]): The color settings for the menu title.
+        __m_banner (Optional[Dict]): The banner for the menu.
     """
 
-    def __init__(self, title: str, config: Optional[dict] = None):
+    def __init__(self, i_title: str, i_config: Optional[Dict] = None):
         """
         Initialize the Menu instance.
 
         Args:
-            title (str): The title of the menu.
-            config (Optional[dict]): A dictionary containing optional settings for items,
+            i_title (str): The title of the menu.
+            i_config (Optional[Dict]): A dictionary containing optional settings for items,
                                      actions, color, and banner.
         """
-        config = config or {}
-        self.__m_title = title
-        self.__m_items = config.get('items', [])
-        self.__m_actions = config.get('actions')
-        self.__m_color = config.get('color')
-        self.__m_banner = config.get('banner')
+        i_config = i_config or {}
+        self.__m_title = i_title
+        self.__m_items = i_config.get('items', [])
+        self.__m_actions = i_config.get('actions')
+        self.__m_color = i_config.get('color')
+        self.__m_banner = i_config.get('banner')
+
+    @property
+    def title(self) -> str:
+        """
+        Gets the title of the menu item.
+
+        Returns:
+            str: The title of the menu item.
+        """
+        return self.__m_title
+
+    @property
+    def color(self) -> Optional[Dict]:
+        """
+        Gets the color settings of the menu item.
+
+        Returns:
+            Optional[Dict]: The color settings of the menu item.
+        """
+        return self.__m_color
+
+    @property
+    def items(self) -> List[MenuItem]:
+        """
+        Gets the items in the menu.
+
+        Returns:
+            List[MenuItem]: A list of items in the menu.
+        """
+        return self.__m_items
+
+    @property
+    def actions(self) -> Optional[object]:
+        """
+        Gets the actions associated with the menu.
+
+        Returns:
+            Optional[object]: An object containing callable actions.
+        """
+        return self.__m_actions
+
+    @property
+    def banner(self) -> Optional[Dict]:
+        """
+        Gets the banner for the menu.
+
+        Returns:
+            Optional[Dict]: The banner for the menu.
+        """
+        return self.__m_banner
 
     def add_item(self, item: MenuItem) -> None:
         """Adds an item to the menu.
@@ -92,11 +142,11 @@ class Menu:
         print(banner)
 
     @staticmethod
-    def get_color_string(color: Optional[dict]) -> str:
+    def get_color_string(color: Optional[Dict]) -> str:
         """Gets the color string based on the provided color settings.
 
         Args:
-            color (Optional[dict]): The color settings.
+            color (Optional[Dict]): The color settings.
 
         Returns:
             str: The color string.

@@ -3,56 +3,40 @@
     "title": "Pymenu-cli"
   },
   "title": "Main Menu",
+  "color": {
+    "text": "yellow",
+    "background": "light_blue"
+  },
   "items": [
     {
       "title": "File",
       "color": {
-        "text": "white",
-        "background": "blue"
+        "text": "black",
+        "background": "light_red"
       },
       "submenu": {
         "title": "File Operations",
         "color": {
-          "text": "red",
-          "background": "white"
+          "text": "green",
+          "background": "light_black"
         },
         "items": [
           {
             "title": "New",
-            "color": {
-              "text": "red",
-              "background": "black"
-          },
             "action": "create_new_file"
           },
           {
             "title": "Open",
-            "color": {
-              "text": "blue",
-              "background": "white"
-          },
             "action": "open_file"
           },
           {
             "title": "Save",
-            "color": {
-              "text": "yellow",
-              "background": "black"
-            },
             "action": "save_file"
           },
           {
             "title": "Save As",
-            "color": {
-              "text": "yellow",
-              "background": "green"
-            },
             "submenu": {
               "title": "Save As Options",
-              "color": {
-                "text": "green",
-                "background": "light_black"
-              },
               "items": [
                 {
                   "title": "Save as Text",
@@ -166,6 +150,10 @@
     },
     {
       "title": "Help",
+      "color": {
+        "text": "red",
+        "background": "black"
+      },
       "submenu": {
         "title": "Help and Support",
         "items": [

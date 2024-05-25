@@ -3,9 +3,16 @@ This module provides functionality to load and display menus from JSON files,
 and to associate actions defined in a Python module with the menu items.
 """
 
+import sys
+import os
+
 import argparse
 import importlib.util
 import json
+from typing import Dict
+
+# Add the project root directory to the PYTHONPATH
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pymenu_cli.models.menu import Menu
 from pymenu_cli.models.menu_item import MenuItem
@@ -43,7 +50,7 @@ def load_menu(file_path: str, actions_path: str) -> Menu:
     return create_menu_from_data(menu_data, actions)
 
 
-def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
+def create_menu_from_data(menu_data: Dict, actions: object) -> Menu:
     """
     Creates a menu from dictionary data.
 
@@ -60,7 +67,8 @@ def create_menu_from_data(menu_data: dict, actions: object) -> Menu:
         'color': menu_data.get('color'),
         'banner': menu_data.get('banner')
     }
-    menu = Menu(menu_data['title'], config=config)
+
+    menu = Menu(i_title=menu_data['title'], i_config=config)
 
     for item_data in menu_data['items']:
         if 'submenu' in item_data:
