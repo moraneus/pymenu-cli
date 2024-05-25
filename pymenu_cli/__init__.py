@@ -1,1 +1,0 @@
-from .pymenu import main
