@@ -12,6 +12,7 @@ import json
 from typing import Dict
 
 # Add the project root directory to the PYTHONPATH
+# pylint: disable=import-error,wrong-import-position
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pymenu_cli.models.menu import Menu

@@ -1,4 +1,4 @@
 colorama~=0.4.6
-setuptools~=69.5.1
+setuptools==70.0.0
 art~=6.2
 pytest~=8.2.1

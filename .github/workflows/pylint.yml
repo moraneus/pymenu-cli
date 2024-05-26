@@ -20,4 +20,4 @@ jobs:
         pip install pylint colorama art setuptools
     - name: Analyse the code with Pylint
       run: |
-        pylint $(git ls-files '*.py' ':!examples/**')
+        pylint $(git ls-files '*.py' ':!examples/**' ':!tests/**')

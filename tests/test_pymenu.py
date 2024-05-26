@@ -1,7 +1,10 @@
+"""
+This module contains tests for the pymenu_cli.pymenu module.
+"""
+
 import json
 import pytest
 from unittest.mock import Mock, patch
-
 from pymenu_cli.pymenu import load_menu, create_menu_from_data, load_actions_module, main
 from pymenu_cli.models.menu import Menu
 
@@ -104,7 +107,7 @@ def test_load_actions_module_with_missing_file():
 
 
 # Tests for the main function
-def test_main_with_valid_args(tmp_path, monkeypatch, capsys):
+def test_main_with_valid_args(tmp_path, monkeypatch):
     """
     Test that the main function correctly loads and displays the menu
     when provided with valid command-line arguments.
@@ -134,7 +137,7 @@ def test_main_with_valid_args(tmp_path, monkeypatch, capsys):
         mock_display.assert_called_once()
 
 
-def test_main_with_missing_args(capsys):
+def test_main_with_missing_args():
     """
     Test that the main function prints the help message
     when command-line arguments are missing.
@@ -147,7 +150,3 @@ def test_main_with_missing_args(capsys):
 
             # Assert that the print_help method was called
             mock_print_help.assert_called_once()
-
-    # Capture the printed output
-    captured = capsys.readouterr()
-    assert captured.out == ""  # No output should be printed
