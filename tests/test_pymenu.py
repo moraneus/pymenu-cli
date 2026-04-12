@@ -127,14 +127,16 @@ def test_main_with_valid_args(tmp_path, monkeypatch):
     # Mock the display method of the Menu class
     with patch.object(Menu, "display") as mock_display:
         # Mock the argparse.ArgumentParser.parse_args method
-        monkeypatch.setattr("argparse.ArgumentParser.parse_args",
-                            lambda self: Mock(menu=str(menu_file), actions=str(actions_file)))
+        monkeypatch.setattr(
+            "argparse.ArgumentParser.parse_args",
+            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=False, theme="dark"),
+        )
 
         # Call the main function
         main()
 
-        # Assert that the display method was called
-        mock_display.assert_called_once()
+        # Assert that the display method was called with the expected arguments
+        mock_display.assert_called_once_with(classic=False, theme="dark")
 
 
 def test_main_with_missing_args():
@@ -143,10 +145,53 @@ def test_main_with_missing_args():
     when command-line arguments are missing.
     """
     # Mock the argparse.ArgumentParser.parse_args method
-    with patch("argparse.ArgumentParser.parse_args", return_value=Mock(menu=None, actions=None)):
+    with patch("argparse.ArgumentParser.parse_args",
+               return_value=Mock(menu=None, actions=None, classic=False, theme="dark")):
         with patch("argparse.ArgumentParser.print_help") as mock_print_help:
             # Call the main function
             main()
 
             # Assert that the print_help method was called
             mock_print_help.assert_called_once()
+
+
+def test_main_with_classic_flag(tmp_path, monkeypatch):
+    """
+    Test that the main function calls display with classic=True when --classic flag is set.
+    """
+    menu_file = tmp_path / "menu.json"
+    actions_file = tmp_path / "actions.py"
+    menu_data = {"title": "Main Menu", "items": [{"title": "Item 1"}]}
+    with open(menu_file, "w", encoding="utf-8") as f:
+        json.dump(menu_data, f)
+    with open(actions_file, "w", encoding="utf-8") as f:
+        f.write("def action1(): pass")
+
+    with patch.object(Menu, "display") as mock_display:
+        monkeypatch.setattr(
+            "argparse.ArgumentParser.parse_args",
+            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=True, theme="dark"),
+        )
+        main()
+        mock_display.assert_called_once_with(classic=True, theme="dark")
+
+
+def test_main_with_theme_flag(tmp_path, monkeypatch):
+    """
+    Test that the main function calls display with theme="light" when --theme light flag is set.
+    """
+    menu_file = tmp_path / "menu.json"
+    actions_file = tmp_path / "actions.py"
+    menu_data = {"title": "Main Menu", "items": [{"title": "Item 1"}]}
+    with open(menu_file, "w", encoding="utf-8") as f:
+        json.dump(menu_data, f)
+    with open(actions_file, "w", encoding="utf-8") as f:
+        f.write("def action1(): pass")
+
+    with patch.object(Menu, "display") as mock_display:
+        monkeypatch.setattr(
+            "argparse.ArgumentParser.parse_args",
+            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=False, theme="light"),
+        )
+        main()
+        mock_display.assert_called_once_with(classic=False, theme="light")

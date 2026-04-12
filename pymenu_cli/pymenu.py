@@ -114,12 +114,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='pymenu-cli - Create interactive CLI menus')
     parser.add_argument('-m', '--menu', type=str, help='Path to the menu JSON file')
     parser.add_argument('-a', '--actions', type=str, help='Path to the actions Python file')
+    parser.add_argument('--classic', action='store_true', default=False,
+                        help='Use classic input()-based display mode')
+    parser.add_argument('--theme', choices=['dark', 'light'], default='dark',
+                        help='Color theme for TUI mode (default: dark)')
     args = parser.parse_args()
 
     if args.menu and args.actions:
         try:
             main_menu = load_menu(args.menu, args.actions)
-            main_menu.display()
+            main_menu.display(classic=args.classic, theme=args.theme)
         except FileNotFoundError as e:
             print(f"Error: {str(e)}")
         except json.JSONDecodeError as e:

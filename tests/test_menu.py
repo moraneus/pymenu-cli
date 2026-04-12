@@ -59,22 +59,22 @@ def test_menu_display(capsys, monkeypatch):
     menu.add_item(item1)
     menu.add_item(item2)
 
-    # Mock the user input
-    user_inputs = iter(["1", "2", "B"])
+    # Mock the user input: select item1 (action), select item2 (submenu), back from submenu, exit main
+    user_inputs = iter(["1", "2", "B", "X"])
     monkeypatch.setattr("builtins.input", lambda _: next(user_inputs))
 
-    # Mock the actions and submenu.display methods
+    # Mock the action
     mock_action1 = Mock()
-    mock_submenu_display = Mock()
     actions.action1 = mock_action1  # Assign the Mock to actions.action1
-    menu.items[1].submenu.display = mock_submenu_display
 
     # Call the display method in classic mode to avoid launching TUI
-    menu.display(classic=True)
+    with pytest.raises(SystemExit):
+        menu.display(classic=True)
 
-    # Assert that the actions and submenu.display methods were called
+    # Assert that the action was called and submenu was navigated into (shown in output)
     mock_action1.assert_called_once()
-    mock_submenu_display.assert_called_once()
+    captured = capsys.readouterr()
+    assert "Submenu" in captured.out
 
 
 def test_menu_get_color_string():
@@ -99,12 +99,11 @@ def test_menu_get_color_string():
 def test_menu_print_banner(capsys):
     """
     Test that the print_banner method of the Menu class
-    correctly prints the banner using the art library.
+    correctly delegates to classic._print_banner.
     """
     menu = Menu("Test Menu", i_config={"banner": {"title": "Banner Text", "font": "standard"}})
 
-    # Mock the art.text2art function
-    with patch("art.text2art", return_value="ASCII_ART"):
+    # Patch _print_banner in the classic module since print_banner delegates there
+    with patch("pymenu_cli.classic._print_banner") as mock_print_banner:
         menu.print_banner()
-        captured = capsys.readouterr()
-        assert captured.out == "ASCII_ART\n"
+        mock_print_banner.assert_called_once_with({"title": "Banner Text", "font": "standard"})
