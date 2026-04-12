@@ -2,13 +2,7 @@
 This module defines the Menu class, which represents a text-based menu system.
 """
 
-import os
-import sys
 from typing import Optional, List, Dict
-
-import art
-
-from pymenu_cli.ui.styles import Styles, TextColors, BackgroundColors
 from pymenu_cli.models.menu_item import MenuItem
 
 
@@ -97,62 +91,30 @@ class Menu:
         """
         self.__m_items.append(item)
 
-    def display(self) -> None:
-        """Displays the menu and handles user input."""
-        while True:
-            os.system('cls' if os.name == 'nt' else 'clear')
-
-            if self.__m_banner:
-                self.print_banner()
-
-            title_color = Menu.get_color_string(self.__m_color)
-            print(f"\n{title_color}{self.__m_title}{Styles.RESET_ALL}\n")
-
-            for i, item in enumerate(self.__m_items, start=1):
-                item_color = self.get_color_string(item.color)
-                print(f"{i}. {item_color}{item.title}{Styles.RESET_ALL}")
-
-            print("\nB. Back")
-            print("X. Exit")
-
-            choice = input("\nEnter your choice: ").upper()
-
-            if choice == 'B':
-                return
-            if choice == 'X':
-                sys.exit()
-            try:
-                index = int(choice) - 1
-                if 0 <= index < len(self.__m_items):
-                    selected_item = self.__m_items[index]
-                    if selected_item.submenu:
-                        selected_item.submenu.display()
-                    elif selected_item.action:
-                        getattr(self.__m_actions, selected_item.action)()
-                else:
-                    raise ValueError
-            except (ValueError, IndexError):
-                input("\nInvalid choice. Press Enter to try again.")
-
-    def print_banner(self) -> None:
-        """Prints the banner using the art library."""
-        banner_text = self.__m_banner.get('title', '')
-        banner_font = self.__m_banner.get('font', 'standard')
-        banner = art.text2art(banner_text, font=banner_font, chr_ignore=True)
-        print(banner)
-
-    @staticmethod
-    def get_color_string(color: Optional[Dict]) -> str:
-        """Gets the color string based on the provided color settings.
+    def display(self, classic: bool = False, theme: str = "dark") -> None:
+        """Display the menu.
 
         Args:
-            color (Optional[Dict]): The color settings.
-
-        Returns:
-            str: The color string.
+            classic: If True, use the classic input() display mode.
+            theme: Theme name ('dark' or 'light'). Only used in TUI mode.
         """
-        if color:
-            text_color = getattr(TextColors, color.get('text', 'WHITE').upper())
-            background_color = getattr(BackgroundColors, color.get('background', 'BLACK').upper())
-            return f"{text_color}{background_color}"
-        return ""
+        if classic:
+            from pymenu_cli.classic import classic_display
+            classic_display(self)
+            return
+        # TUI mode — will be implemented in Task 6
+        # For now, fall back to classic
+        from pymenu_cli.classic import classic_display
+        classic_display(self)
+
+    def print_banner(self) -> None:
+        """Print the banner. Delegates to classic module."""
+        from pymenu_cli.classic import _print_banner
+        if self.__m_banner:
+            _print_banner(self.__m_banner)
+
+    @staticmethod
+    def get_color_string(color) -> str:
+        """Get the color string for the given color settings."""
+        from pymenu_cli.classic import _get_color_string
+        return _get_color_string(color)
