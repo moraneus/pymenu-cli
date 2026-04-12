@@ -1,4 +1,9 @@
 {
+  "banner": {
+    "title": "Pymenu-cli",
+    "style": "emoji",
+    "icon": "📋"
+  },
   "title": "Main Menu",
   "items": [
     {

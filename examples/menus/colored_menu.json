@@ -1,6 +1,9 @@
 {
   "banner": {
-    "title": "Pymenu-cli"
+    "title": "Pymenu-cli",
+    "style": "gradient",
+    "colors": ["red", "magenta"],
+    "subtitle": "v2.0 — Interactive TUI Menus"
   },
   "title": "Main Menu",
   "color": {
