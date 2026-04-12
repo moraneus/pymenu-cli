@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pymenu-cli"
+version = "2.0.0"
+description = "A simple yet powerful Python library for creating interactive CLI menus"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "Moraneus", email = "moraneus@gmail.com" }
+]
+keywords = ["cli", "menu", "tui", "terminal", "interactive"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "textual>=0.50.0",
+    "pyfiglet>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "textual-dev>=1.0",
+    "pylint>=3.0",
+]
+
+[project.scripts]
+pymenu-cli = "pymenu_cli.pymenu:main"
+
+[project.urls]
+Homepage = "https://github.com/moraneus/pymenu-cli"
+Repository = "https://github.com/moraneus/pymenu-cli"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "pylint>=3.3.9",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "textual-dev>=1.8.0",
+]
