@@ -102,10 +102,9 @@ class Menu:
             from pymenu_cli.classic import classic_display
             classic_display(self)
             return
-        # TUI mode — will be implemented in Task 6
-        # For now, fall back to classic
-        from pymenu_cli.classic import classic_display
-        classic_display(self)
+        from pymenu_cli.app import MenuApp
+        app = MenuApp(self, theme=theme)
+        app.run()
 
     def print_banner(self) -> None:
         """Print the banner. Delegates to classic module."""

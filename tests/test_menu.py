@@ -69,8 +69,8 @@ def test_menu_display(capsys, monkeypatch):
     actions.action1 = mock_action1  # Assign the Mock to actions.action1
     menu.items[1].submenu.display = mock_submenu_display
 
-    # Call the display method
-    menu.display()
+    # Call the display method in classic mode to avoid launching TUI
+    menu.display(classic=True)
 
     # Assert that the actions and submenu.display methods were called
     mock_action1.assert_called_once()
