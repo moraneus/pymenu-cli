@@ -47,11 +47,3 @@ Repository = "https://github.com/moraneus/pymenu-cli"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-
-[dependency-groups]
-dev = [
-    "pylint>=3.3.9",
-    "pytest>=8.4.2",
-    "pytest-asyncio>=1.2.0",
-    "textual-dev>=1.8.0",
-]
