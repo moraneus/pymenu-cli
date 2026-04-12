@@ -1,0 +1,114 @@
+/* pymenu-cli Dark Theme */
+
+Screen {
+    background: #1a1a2e;
+}
+
+#header {
+    dock: top;
+    height: auto;
+    background: #16213e;
+    color: #e94560;
+    padding: 0 1;
+}
+
+#breadcrumb {
+    dock: top;
+    height: 1;
+    background: #1a1a3e;
+    color: #888888;
+    padding: 0 1;
+}
+
+#sidebar {
+    width: 30;
+    background: #16213e;
+    border-right: solid #0f3460;
+    padding: 1 0;
+}
+
+#sidebar .sidebar-label {
+    color: #555555;
+    text-style: bold;
+    padding: 0 1;
+}
+
+#sidebar .sidebar-item {
+    color: #e0e0e0;
+    padding: 0 1;
+}
+
+#sidebar .sidebar-item.--active {
+    background: #0f3460;
+    color: #e94560;
+}
+
+#menu-panel {
+    background: #1a1a2e;
+    padding: 1;
+}
+
+#search-bar {
+    dock: top;
+    height: 3;
+    background: #16213e;
+    border: solid #0f3460;
+    margin: 0 0 1 0;
+}
+
+#search-bar Input {
+    background: #16213e;
+    color: #e0e0e0;
+    border: none;
+}
+
+.menu-item {
+    height: 3;
+    padding: 0 1;
+    color: #e0e0e0;
+    background: #1a1a2e;
+}
+
+.menu-item.--highlighted {
+    background: #e94560;
+    color: #ffffff;
+}
+
+.menu-item .item-indicator {
+    color: #555555;
+}
+
+.menu-item.--highlighted .item-indicator {
+    color: #ffffff;
+}
+
+#output-panel {
+    height: 1fr;
+    max-height: 12;
+    background: #0d1117;
+    border-top: solid #0f3460;
+    padding: 1;
+}
+
+#output-panel .output-label {
+    color: #555555;
+    text-style: bold;
+}
+
+#output-panel .output-success {
+    color: #4ec9b0;
+}
+
+#output-panel .output-error {
+    color: #e94560;
+}
+
+Footer {
+    background: #16213e;
+    color: #888888;
+}
+
+Footer > .footer--key {
+    background: #0f3460;
+    color: #e94560;
+}
