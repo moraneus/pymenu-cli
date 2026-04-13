@@ -4,7 +4,7 @@ This module preserves the original pymenu-cli v1.x display behavior.
 Activated via the --classic CLI flag or display(classic=True).
 """
 
-import subprocess
+import os
 import sys
 from typing import Optional
 
@@ -13,9 +13,7 @@ from pymenu_cli.ui.styles import Styles, TextColors, BackgroundColors
 
 def _clear_screen() -> None:
     """Clear the terminal screen."""
-    import platform
-    cmd = "cls" if platform.system() == "Windows" else "clear"
-    subprocess.run([cmd], shell=False, check=False)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def classic_display(menu) -> None:

@@ -2,6 +2,7 @@
 
 Screen {
     background: #fafafa;
+    color: #333333;
 }
 
 #header {
@@ -23,8 +24,14 @@ Screen {
 #sidebar {
     width: 30;
     background: #f0f0f0;
+    color: #333333;
     border-right: solid #dddddd;
     padding: 1 0;
+}
+
+#sidebar Tree {
+    background: #f0f0f0;
+    color: #333333;
 }
 
 #sidebar .sidebar-label {
