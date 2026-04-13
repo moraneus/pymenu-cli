@@ -2,25 +2,46 @@
 
 ![PyPI](https://img.shields.io/pypi/v/pymenu-cli)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pymenu-cli)
+![Python](https://img.shields.io/pypi/pyversions/pymenu-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-pymenu-cli is a Python library that simplifies the creation of interactive command-line interface (CLI) menus. It provides a convenient way to define hierarchical menu structures and associate actions with menu items.
+A Python library for creating interactive terminal user interface (TUI) menus from JSON configuration files. Define your menu structure in JSON, write your actions in Python, and get a full-featured TUI application with keyboard navigation, mouse support, global search, theming, and more.
 
-![Alt Text](https://github.com/moraneus/pymenu-cli/blob/main/docs/example.gif)
-
-
+> **v2.0** — Complete rewrite with a modern TUI powered by [Textual](https://textual.textualize.io/). The classic numbered-menu mode is still available via `--classic`.
 
 ## Features
 
-- Define menus and submenus using a simple JSON file format
-- Automatically generate navigation options (e.g., "Back" and "Exit")
-- Execute specific functions based on user selections
-- Customizable menu titles and item labels
-- Flexible and extensible architecture
-- Execute menus directly from the command line
-- Support for color customization of menu titles and items
-- Display a banner using ASCII art with customizable text and font
+- **Full TUI Application** — Sidebar navigation, breadcrumb trail, action output panel, footer with keybinding hints
+- **Keyboard & Mouse Navigation** — Arrow keys, vim keys (`j`/`k`), Enter to select, mouse click support
+- **Global Search** — Press `/` to search across all menus and submenus instantly
+- **Dark & Light Themes** — Toggle with `T` at runtime, or start with `--theme light`
+- **5 Banner Styles** — Rich text, box-drawing, FIGlet, gradient, and emoji
+- **Classic Mode** — Original v1 numbered-menu experience via `--classic` flag
+- **JSON-Driven** — Define menus, submenus, colors, and banners in simple JSON
+- **Backward Compatible** — Existing v1 JSON files and action modules work unchanged
+- **Python 3.9+** — Modern Python with `pyproject.toml` packaging
 
+## TUI Layout
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  HEADER — App title/banner                              │
+├─────────────────────────────────────────────────────────┤
+│  BREADCRUMB — Main Menu › Tools › Settings              │
+├──────────────┬──────────────────────────────────────────┤
+│              │  🔍 Search/filter bar                     │
+│  SIDEBAR     │                                           │
+│  Menu Tree   │  ❯ General Settings          ⚡ action    │
+│              │    Advanced Settings          ⚡ action    │
+│  ▼ Main      │                                           │
+│    ▶ Tools   │──────────────────────────────────────────│
+│      Help    │  OUTPUT PANEL                             │
+│              │  $ open_general_settings()                │
+│              │  ✓ Working directory: /home/user          │
+├──────────────┴──────────────────────────────────────────┤
+│  ↑↓ Navigate   Enter Select   Esc Back   / Search      │
+└─────────────────────────────────────────────────────────┘
+```
 
 ## Installation
 
@@ -28,73 +49,32 @@ pymenu-cli is a Python library that simplifies the creation of interactive comma
 pip install pymenu-cli
 ```
 
-## Usage
+## Quick Start
 
-1. Define your menu structure in a JSON file (`menu.json`)
-2. Implement the corresponding action functions in a separate Python file (`actions.py`)
-
-### Using the Python API
-
-```python
-from pymenu_cli.menu import load_menu
-
-# Define the 'menu' and the 'action' files 
-menu_file_path = 'menu.json'
-actions_file_path = 'actions.py'
-
-# Init the menu with this files
-main_menu = load_menu(menu_file_path, actions_file_path)
-
-# Display the menu
-main_menu.display()
-```
-
-### Using the Command Line
-```bash
-pymenu-cli --menu menu.json --actions actions.py
-```
-
-pymenu-cli takes care of the menu navigation, menu stying, user input handling, and execution of the associated actions based on the user's selections.
-
-## Menu JSON Format
-The `menu.json` file defines the structure of your menu. Here's an example:
+### 1. Create a menu JSON file (`menu.json`)
 
 ```json
 {
   "banner": {
-    "title": "HELLO",
-    "font": "white_bubble"
+    "title": "My App",
+    "style": "gradient",
+    "colors": ["red", "magenta"],
+    "subtitle": "v1.0"
   },
   "title": "Main Menu",
-  "color": {
-    "text": "light_blue",
-    "background": "black"
-  },
   "items": [
     {
-      "title": "Option 1",
-      "color": {
-        "text": "yellow",
-        "background": "blue"
-      },
-      "action": "action_function_1"
+      "title": "Say Hello",
+      "action": "say_hello"
     },
     {
-      "title": "Option 2",
-      "color": {
-        "text": "black",
-        "background": "light_yellow"
-      },
+      "title": "Settings",
       "submenu": {
-        "title": "Submenu",
+        "title": "Settings",
         "items": [
           {
-            "title": "Submenu Option 1",
-            "action": "action_function_2"
-          },
-          {
-            "title": "Submenu Option 2",
-            "action": "action_function_3"
+            "title": "Show Config",
+            "action": "show_config"
           }
         ]
       }
@@ -103,168 +83,343 @@ The `menu.json` file defines the structure of your menu. Here's an example:
 }
 ```
 
-In the `menu.json` file, you can specify the following properties:
-* `banner` (optional): The banner configuration for the menu.
-  * `title`: The text to display in the banner.
-  * `font` (optional): The font to use for the banner. If not specified, the default font will be used.
-* `title`: The title of the menu or submenu.
-* `color` (optional): The color settings for the menu or submenu title. 
-  * `text`: The color of the text (e.g., "red", "light_blue").
-  * `background`: The color of the background (e.g., "white", "black").
-* `items`: An array of menu items, each with its own properties:
-  * `title`: The title of the menu item.
-  * `color` (optional): The color settings for the menu item title. 
-  * `action` (optional): The name of the action function to execute when the item is selected.
-  * `submenu` (optional): A nested submenu with its own title and items.
+### 2. Create an actions file (`actions.py`)
 
-### Banner Customization
-PyMenu CLI supports displaying a banner using ASCII art. 
-The banner can be customized by specifying the banner property in the menu.json file.
-The banner property has the following sub-properties:
-* `title`: The text to display in the banner.
-* `font` (optional): The font to use for the banner. If not specified, the default font will be used.
-
-PyMenu CLI uses the art library to generate the ASCII art for the banner. 
-You can choose from a wide range of available fonts provided by the [art](https://pypi.org/project/art/) library. Here are some font options:
-
-* "standard"
-```text
- _____                _   
-|  ___|  ___   _ __  | |_ 
-| |_    / _ \ | '_ \ | __|
-|  _|  | (_) || | | || |_ 
-|_|     \___/ |_| |_| \__|
-```
-  
-* "block"
-```text
- .----------------.  .----------------.  .-----------------. .----------------. 
-| .--------------. || .--------------. || .--------------. || .--------------. |
-| |  _________   | || |     ____     | || | ____  _____  | || |  _________   | |
-| | |_   ___  |  | || |   .'    `.   | || ||_   \|_   _| | || | |  _   _  |  | |
-| |   | |_  \_|  | || |  /  .--.  \  | || |  |   \ | |   | || | |_/ | | \_|  | |
-| |   |  _|      | || |  | |    | |  | || |  | |\ \| |   | || |     | |      | |
-| |  _| |_       | || |  \  `--'  /  | || | _| |_\   |_  | || |    _| |_     | |
-| | |_____|      | || |   `.____.'   | || ||_____|\____| | || |   |_____|    | |
-| |              | || |              | || |              | || |              | |
-| '--------------' || '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'  '----------------' 
-```
-* "bubble"
-```text
-  _    _    _    _  
- / \  / \  / \  / \ 
-( F )( o )( n )( t )
- \_/  \_/  \_/  \_/ 
-```
-* "white_bubble"
-```text
-Ⓕⓞⓝⓣ
-```
-* "black_bubble"
-```text
-🅕🅞🅝🅣
-```
-* "digital"
-```text
-+-++-++-++-+
-|f||o||n||t|
-+-++-++-++-+
-```
-* "isometric1"
-```text
-      ___           ___           ___           ___     
-     /\  \         /\  \         /\__\         /\  \    
-    /::\  \       /::\  \       /::|  |        \:\  \   
-   /:/\:\  \     /:/\:\  \     /:|:|  |         \:\  \  
-  /::\~\:\  \   /:/  \:\  \   /:/|:|  |__       /::\  \ 
- /:/\:\ \:\__\ /:/__/ \:\__\ /:/ |:| /\__\     /:/\:\__\
- \/__\:\ \/__/ \:\  \ /:/  / \/__|:|/:/  /    /:/  \/__/
-      \:\__\    \:\  /:/  /      |:/:/  /    /:/  /     
-       \/__/     \:\/:/  /       |::/  /     \/__/      
-                  \::/  /        /:/  /                 
-                   \/__/         \/__/                  
-```
-* "letters"
-```text
-FFFFFFF                tt    
-FF       oooo  nn nnn  tt    
-FFFF    oo  oo nnn  nn tttt  
-FF      oo  oo nn   nn tt    
-FF       oooo  nn   nn  tttt 
-```
-* "arrow"
-```text
->=======>                        >=>   
->=>                              >=>   
->=>          >=>     >==>>==>  >=>>==> 
->=====>    >=>  >=>   >=>  >=>   >=>   
->=>       >=>    >=>  >=>  >=>   >=>   
->=>        >=>  >=>   >=>  >=>   >=>   
->=>          >=>     >==>  >=>    >=>  
-```
-* "slant"
-```text
-    ______                  __ 
-   / ____/  ____    ____   / /_
-  / /_     / __ \  / __ \ / __/
- / __/    / /_/ / / / / // /_  
-/_/       \____/ /_/ /_/ \__/  
-```
-
-For a complete list of available fonts, 
-please refer to the [art library documentation](https://pypi.org/project/art/).
-If no font is specified in the banner configuration, PyMenu CLI will use the default font provided by the art library.
-
-### Color Customization
-PyMenu CLI supports color customization of menu titles and items using the colorama library. 
-You can specify the color of the text and background for each menu and item in the menu.json file.
-The available color options are defined in the TextColors and BackgroundColors enums:
-
-#### TextColors
-`RED`, `LIGHT_RED`, `BLUE`, `LIGHT_BLUE`, `YELLOW`, 
-`LIGHT_YELLOW`, `GREEN`, `LIGHT_GREEN`, `CYAN`, `LIGHT_CYAN`,
-`MAGENTA`, `LIGHT_MAGENTA`, `BLACK`, `LIGHT_BLACK`, `WHITE`, 
-`LIGHT_WHITE`
-
-
-#### BackgroundColors
-`RED`, `LIGHT_RED`, `BLUE`, `LIGHT_BLUE`, `YELLOW`, 
-`LIGHT_YELLOW`, `GREEN`, `LIGHT_GREEN`, `CYAN`, `LIGHT_CYAN`,
-`MAGENTA`, `LIGHT_MAGENTA`, `BLACK`, `LIGHT_BLACK`, `WHITE`, 
-`LIGHT_WHITE`
-
-To apply colors to a menu or item, 
-add the color property with the desired `text` and `background` colors in the menu.json file.
-
-### Color Example
-
-Here's an example of how the menu with colors would look like:
-* [View Color Examples](https://htmlpreview.github.io/?https://github.com/moraneus/pymenu-cli/blob/main/docs/colors_example.html)
-
-## Actions Python File
-The `actions.py` file contains the functions that are executed when a menu item is selected. Here's an example:
 ```python
-def action_function_1():
-    print("Executing action 1")
+import platform
 
-def action_function_2():
-    print("Executing action 2")
+def say_hello():
+    print("Hello from pymenu-cli!")
+    print(f"Running on {platform.system()} {platform.machine()}")
 
-def action_function_3():
-    print("Executing action 3")
+def show_config():
+    print("Config: default settings loaded")
 ```
 
-### Examples
-Explore the examples directory for sample menu configurations and action implementations. 
-To run an example, follow these steps:
+### 3. Run it
 
-1. Clone the project repository.
-2. Open your command line and navigate to the examples directory.
-3. Execute the example by running the following command:
+```bash
+# Launch the TUI (default)
+pymenu-cli --menu menu.json --actions actions.py
+
+# Classic numbered-menu mode
+pymenu-cli --menu menu.json --actions actions.py --classic
+
+# Start with light theme
+pymenu-cli --menu menu.json --actions actions.py --theme light
+```
+
+### Or use the Python API
+
 ```python
-python3 menu_example.py
+from pymenu_cli.pymenu import load_menu
+
+menu = load_menu("menu.json", "actions.py")
+menu.display()                          # TUI mode (default)
+menu.display(classic=True)              # Classic mode
+menu.display(theme="light")             # Light theme
 ```
 
-### License
-This project is licensed under the MIT License.
+## Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `↑` / `k` | Move cursor up |
+| `↓` / `j` | Move cursor down |
+| `Enter` | Select item (enter submenu or run action) |
+| `Esc` | Go back / clear search |
+| `Backspace` | Go back to parent menu |
+| `/` | Focus global search bar |
+| `T` | Toggle dark/light theme |
+| `Q` | Quit application |
+
+**Mouse:** Click menu items, sidebar nodes, or scroll the output panel.
+
+## Menu JSON Format
+
+### Full Structure
+
+```json
+{
+  "banner": {
+    "title": "App Name",
+    "style": "gradient",
+    "colors": ["red", "blue"],
+    "subtitle": "Optional subtitle"
+  },
+  "title": "Main Menu",
+  "color": {
+    "text": "yellow",
+    "background": "light_blue"
+  },
+  "items": [
+    {
+      "title": "Action Item",
+      "action": "function_name",
+      "color": { "text": "green", "background": "black" }
+    },
+    {
+      "title": "Submenu Item",
+      "submenu": {
+        "title": "Submenu Title",
+        "items": [ ... ]
+      }
+    }
+  ]
+}
+```
+
+### Properties
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| `title` | Yes | Menu or item title |
+| `items` | Yes | Array of menu items |
+| `banner` | No | Header banner configuration |
+| `color` | No | Text and background color for the title |
+| `action` | No | Name of the Python function to execute |
+| `submenu` | No | Nested submenu (same structure as root) |
+
+### Banner Styles
+
+All banner styles are rendered using Rich/Textual — no extra dependencies needed (except `pyfiglet` for FIGlet style).
+
+#### Rich Text (`"style": "rich"`)
+Clean, bold title with optional subtitle.
+```json
+"banner": { "title": "My App", "style": "rich", "subtitle": "v1.0" }
+```
+
+#### Box Drawing (`"style": "box"`)
+Unicode box frame around the title.
+```json
+"banner": { "title": "My App", "style": "box" }
+```
+```
+╔════════════════╗
+║    My App      ║
+╚════════════════╝
+```
+
+#### FIGlet (`"style": "figlet"`)
+Large ASCII art text. Supports font selection via the `font` parameter. See [pyfiglet fonts](https://github.com/pwaller/pyfiglet#supported-fonts).
+```json
+"banner": { "title": "My App", "style": "figlet", "font": "slant" }
+```
+```
+    __  ___         ___                
+   /  |/  /__  __  /   |  ____   ____ 
+  / /|_/ / / / / / / /| | / __ \ / __ \
+ / /  / / /_/ / / ___ |/ /_/ // /_/ /
+/_/  /_/\__, / /_/  |_/ .___// .___/ 
+       /____/        /_/    /_/      
+```
+
+#### Gradient (`"style": "gradient"`)
+Color gradient across the title text.
+```json
+"banner": { "title": "My App", "style": "gradient", "colors": ["red", "blue"] }
+```
+
+#### Emoji (`"style": "emoji"`)
+Emoji icon paired with styled text.
+```json
+"banner": { "title": "My App", "style": "emoji", "icon": "🚀" }
+```
+
+#### Backward Compatibility
+Existing v1 format with `"font"` (no `"style"`) automatically maps to FIGlet:
+```json
+"banner": { "title": "My App", "font": "standard" }
+```
+
+### Color Options
+
+Colors work in **classic mode** for text and background styling. In TUI mode, they act as overrides on top of the active theme.
+
+**Available colors:** `RED`, `LIGHT_RED`, `BLUE`, `LIGHT_BLUE`, `YELLOW`, `LIGHT_YELLOW`, `GREEN`, `LIGHT_GREEN`, `CYAN`, `LIGHT_CYAN`, `MAGENTA`, `LIGHT_MAGENTA`, `BLACK`, `LIGHT_BLACK`, `WHITE`, `LIGHT_WHITE`
+
+```json
+{
+  "title": "Highlighted Item",
+  "color": { "text": "yellow", "background": "blue" },
+  "action": "my_function"
+}
+```
+
+## Actions File
+
+The actions file is a plain Python module. Each function name corresponds to an `"action"` value in the JSON. Functions receive no arguments. In TUI mode, `print()` output is captured and displayed in the output panel.
+
+```python
+import os
+import platform
+
+def show_system_info():
+    print(f"OS: {platform.system()} {platform.release()}")
+    print(f"Python: {platform.python_version()}")
+    print(f"CWD: {os.getcwd()}")
+
+def create_file():
+    with open("output.txt", "w") as f:
+        f.write("Hello from pymenu-cli!\n")
+    print("✓ Created output.txt")
+
+def risky_action():
+    # Exceptions are caught and shown in the output panel
+    raise ValueError("Something went wrong!")
+```
+
+## Global Search
+
+Press `/` to activate the search bar. It searches across **all menus and submenus**, not just the current view. Results show the full path to each matching item:
+
+```
+❯ General Settings  ⚡ (Main Menu › Tools › Settings)
+  Advanced Settings  ⚡ (Main Menu › Tools › Settings)
+  Generate Password  ⚡ (Main Menu › Tools)
+```
+
+Press `Enter` to navigate to the item and execute it. Press `Esc` to clear the search.
+
+## Theming
+
+Two built-in themes: **dark** (default) and **light**.
+
+- Toggle at runtime: press `T`
+- Start with a theme: `--theme light`
+- Via API: `menu.display(theme="light")`
+
+Themes are implemented as Textual CSS files in `pymenu_cli/themes/`. Custom themes can be added by creating new `.tcss` files.
+
+## Classic Mode
+
+The original v1 numbered-menu experience is preserved:
+
+```bash
+pymenu-cli --menu menu.json --actions actions.py --classic
+```
+
+```
+Main Menu
+
+1. File
+2. Edit
+3. Tools
+4. Help
+
+B. Back
+X. Exit
+
+Enter your choice:
+```
+
+## CLI Reference
+
+```
+pymenu-cli [-h] [-m MENU] [-a ACTIONS] [--classic] [--theme {dark,light}]
+
+Options:
+  -m, --menu MENU          Path to the menu JSON file
+  -a, --actions ACTIONS    Path to the actions Python file
+  --classic                Use classic numbered-menu mode
+  --theme {dark,light}     Color theme for TUI mode (default: dark)
+  -h, --help               Show help message
+```
+
+## Examples
+
+The `examples/` directory contains a full working example with real actions:
+
+```bash
+# Clone and run
+git clone https://github.com/moraneus/pymenu-cli.git
+cd pymenu-cli
+
+# Install
+pip install -e ".[dev]"
+
+# Run the TUI example
+pymenu-cli --menu examples/menus/colored_menu.json --actions examples/actions/actions.py
+
+# Run in classic mode
+pymenu-cli --menu examples/menus/colored_menu.json --actions examples/actions/actions.py --classic
+
+# Run with light theme
+pymenu-cli --menu examples/menus/colored_menu.json --actions examples/actions/actions.py --theme light
+```
+
+The example includes:
+- **File operations** — Create files, list workspace, export as text/JSON/XML
+- **Edit operations** — Clipboard cut/copy/paste, workspace stats
+- **Tools** — System info, password generator, plugin manager, backup/restore
+- **Help** — User guide with keybindings, FAQ, about page
+
+## Migration from v1
+
+pymenu-cli v2.0 is fully backward compatible. Your existing JSON files and action modules work without changes:
+
+| What | v1 | v2 |
+|------|----|----|
+| Default display | Numbered menu (`input()`) | Full TUI (Textual) |
+| Old display mode | — | `--classic` flag |
+| Dependencies | `colorama`, `art` | `textual`, `pyfiglet`, `colorama` |
+| Python | 3.8+ | 3.9+ |
+| Packaging | `setup.py` | `pyproject.toml` |
+| Banner format | `"font": "standard"` | Still works (auto-detected as FIGlet) |
+| New banner styles | — | `rich`, `box`, `gradient`, `emoji` |
+| Theming | — | `dark` / `light` with `T` toggle |
+| Search | — | Global search with `/` |
+
+**Breaking changes:** Python 3.8 is no longer supported (EOL since Oct 2024).
+
+## Development
+
+```bash
+# Clone
+git clone https://github.com/moraneus/pymenu-cli.git
+cd pymenu-cli
+
+# Install with dev dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run linter
+pylint pymenu_cli/
+
+# Run with Textual dev console (live CSS reload)
+textual run --dev pymenu_cli.app:MenuApp
+```
+
+## Project Structure
+
+```
+pymenu_cli/
+├── __init__.py          # Public API exports
+├── app.py               # MenuApp — main Textual TUI application
+├── banner.py            # Banner rendering (5 styles)
+├── classic.py           # Classic v1 numbered-menu mode
+├── pymenu.py            # CLI entry point, JSON/module loading
+├── models/
+│   ├── menu.py          # Menu class
+│   └── menu_item.py     # MenuItem class
+├── widgets/
+│   ├── sidebar.py       # Menu tree sidebar
+│   ├── menu_list.py     # Navigable menu items panel
+│   ├── breadcrumb.py    # Breadcrumb navigation bar
+│   ├── search_bar.py    # Global search/filter bar
+│   └── output_panel.py  # Action stdout/stderr panel
+└── themes/
+    ├── dark.tcss        # Dark theme (default)
+    └── light.tcss       # Light theme
+```
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Author
+
+Created by [Moraneus](https://github.com/moraneus).

@@ -66,7 +66,7 @@ Before submitting your PR, make sure all tests pass. You can run the tests using
 
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+pip install -e ".[dev]"
 
 # Run tests
 pytest
