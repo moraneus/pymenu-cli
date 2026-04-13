@@ -160,6 +160,9 @@ cython_debug/
 .idea/
 .DS_Store
 
+# uv lock file (not needed for libraries)
+uv.lock
+
 # Claude Code / AI assistant artifacts
 .claude/
 CLAUDE.md
