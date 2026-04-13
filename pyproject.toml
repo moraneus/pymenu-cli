@@ -78,11 +78,6 @@ max-line-length = 100
 [tool.pylint.messages_control]
 disable = ["cyclic-import"]
 
-[dependency-groups]
-dev = [
-    "build>=1.4.3",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["pymenu_cli"]
 
@@ -92,5 +87,8 @@ exclude = [
     "tests/",
     "examples/",
     ".github/",
+    ".claude/",
     ".superpowers/",
+    ".workspace/",
+    "CLAUDE.md",
 ]
