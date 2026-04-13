@@ -72,6 +72,8 @@ class MenuApp(App):
         self._update_breadcrumb()
         if self._app_theme == "light":
             self._apply_theme("light")
+        # Focus the menu list so keyboard navigation works immediately
+        self.query_one(MenuListPanel).focus()
 
     def _update_breadcrumb(self) -> None:
         path = [m.title for m in self._menu_stack]
@@ -86,6 +88,7 @@ class MenuApp(App):
         self._cursor_stack.append(0)
 
         panel.set_menu(menu)
+        panel.focus()
         self.query_one(MenuSidebar).set_active(menu)
         self._update_breadcrumb()
 
@@ -114,6 +117,8 @@ class MenuApp(App):
 
         except Exception:
             output_panel.append_error(traceback.format_exc())
+        finally:
+            self.query_one(MenuListPanel).focus()
 
     def on_menu_list_panel_menu_item_selected(self, event: MenuListPanel.MenuItemSelected) -> None:
         item = event.item
@@ -177,6 +182,7 @@ class MenuApp(App):
             panel = self.query_one(MenuListPanel)
             panel.set_menu(self.current_menu)
             panel.cursor_index = self._cursor_stack[-1]
+            panel.focus()
             self.query_one(MenuSidebar).set_active(self.current_menu)
             self._update_breadcrumb()
 
