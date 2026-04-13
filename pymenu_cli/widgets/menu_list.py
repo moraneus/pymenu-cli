@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
-from rich.text import Text
-from textual.containers import Vertical
+from dataclasses import dataclass
+
 from textual.message import Message
 from textual.reactive import reactive
+from textual.containers import Vertical
+from rich.text import Text
 
 
+@dataclass
 class SearchResult:
     """A search result entry from the global menu index."""
 
-    __slots__ = ("item", "path", "menu")
-
-    def __init__(self, item, path: str, menu) -> None:
-        self.item = item
-        self.path = path
-        self.menu = menu
+    item: object
+    path: str
+    menu: object
 
 
 class MenuListPanel(Vertical, can_focus=True):
@@ -59,13 +59,19 @@ class MenuListPanel(Vertical, can_focus=True):
             return len(self._search_results)
         return len(self._filtered_indices)
 
+    @property
+    def is_searching(self) -> bool:
+        """Whether the panel is currently showing search results."""
+        return self._search_results is not None
+
     def _update_filtered(self) -> None:
         if not self._filter_query:
             self._filtered_indices = list(range(len(self.menu.items)))
         else:
             query = self._filter_query.lower()
             self._filtered_indices = [
-                i for i, item in enumerate(self.menu.items) if query in item.title.lower()
+                i for i, item in enumerate(self.menu.items)
+                if query in item.title.lower()
             ]
         if self._filtered_indices:
             self.cursor_index = min(self.cursor_index, len(self._filtered_indices) - 1)
@@ -147,7 +153,7 @@ class MenuListPanel(Vertical, can_focus=True):
             result.append("\n")
         return result
 
-    def _get_selected_item(self):
+    def _get_selected_item(self) -> object | None:
         if self._search_results is not None:
             if not self._search_results or self.cursor_index >= len(self._search_results):
                 return None

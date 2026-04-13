@@ -1,9 +1,9 @@
 """Sidebar widget displaying the menu tree hierarchy."""
 
-from textual import on
+from textual.widgets import Tree
 from textual.containers import Vertical
 from textual.message import Message
-from textual.widgets import Tree
+from textual import on
 
 
 class MenuSidebar(Vertical):
@@ -46,7 +46,6 @@ class MenuSidebar(Vertical):
 
     @on(Tree.NodeSelected)
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
-        from pymenu_cli.models.menu import Menu
-
+        from pymenu_cli.models.menu import Menu  # Lazy import to avoid circular dependency
         if isinstance(event.node.data, Menu):
             self.post_message(self.SidebarItemSelected(event.node.data))

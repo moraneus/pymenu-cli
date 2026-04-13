@@ -4,8 +4,7 @@ using the colorama library.
 """
 
 from enum import Enum
-
-from colorama import Back, Fore, Style
+from colorama import Fore, Style, Back
 
 
 class StrEnum(Enum):
@@ -24,7 +23,6 @@ class TextColors(StrEnum):
     """
     Enum for defining text colors using colorama's Fore class.
     """
-
     RED = Fore.RED
     LIGHT_RED = Fore.LIGHTRED_EX
     BLUE = Fore.BLUE
@@ -47,7 +45,6 @@ class BackgroundColors(StrEnum):
     """
     Enum for defining background colors using colorama's Back class.
     """
-
     RED = Back.RED
     LIGHT_RED = Back.LIGHTRED_EX
     BLUE = Back.BLUE
@@ -70,12 +67,7 @@ class Styles(StrEnum):
     """
     Enum for defining text styles using colorama's Style class.
     """
-
     BRIGHT = Style.BRIGHT
     NORMAL = Style.NORMAL
     DIM = Style.DIM
     RESET_ALL = Style.RESET_ALL
-
-
-# Example usage:
-# print(f"{BackgroundColors.WHITE}{TextColors.BLACK}test_text{Styles.RESET_ALL}")

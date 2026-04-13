@@ -45,10 +45,12 @@ class MenuApp(App):
 
     @property
     def current_menu(self) -> object:
+        """Return the currently active menu."""
         return self._menu_stack[-1]
 
     @property
     def app_theme(self) -> str:
+        """Return the current theme name."""
         return self._app_theme
 
     def compose(self) -> ComposeResult:
@@ -132,10 +134,8 @@ class MenuApp(App):
         stderr_capture = io.StringIO()
 
         try:
-            with (
-                contextlib.redirect_stdout(stdout_capture),
-                contextlib.redirect_stderr(stderr_capture),
-            ):
+            with contextlib.redirect_stdout(stdout_capture), \
+                 contextlib.redirect_stderr(stderr_capture):
                 action_fn = getattr(self.current_menu.actions, item.action)
                 action_fn()
 
@@ -149,7 +149,7 @@ class MenuApp(App):
             if not stdout_text and not stderr_text:
                 output_panel.append_output("✓ Done (no output)")
 
-        except Exception:
+        except Exception:  # Catch all action errors to display in output panel
             output_panel.append_error(traceback.format_exc())
         finally:
             self.query_one(MenuListPanel).focus()
@@ -159,7 +159,8 @@ class MenuApp(App):
         source_menu = event.menu
 
         # If this came from a search result, navigate to the item's menu first
-        if source_menu is not None and source_menu is not self.current_menu:
+        if (source_menu is not None
+                and source_menu is not self.current_menu):
             self._navigate_to_menu(source_menu)
             # Clear search after selecting a result
             self.query_one(SearchBar).clear()
@@ -195,12 +196,11 @@ class MenuApp(App):
         return False
 
     def on_breadcrumb_bar_breadcrumb_navigate(
-        self, event: BreadcrumbBar.BreadcrumbNavigate
-    ) -> None:
+            self, event: BreadcrumbBar.BreadcrumbNavigate) -> None:
         level = event.level
         if level < len(self._menu_stack):
-            self._menu_stack = self._menu_stack[: level + 1]
-            self._cursor_stack = self._cursor_stack[: level + 1]
+            self._menu_stack = self._menu_stack[:level + 1]
+            self._cursor_stack = self._cursor_stack[:level + 1]
 
             panel = self.query_one(MenuListPanel)
             panel.set_menu(self.current_menu)
@@ -217,18 +217,19 @@ class MenuApp(App):
             return
         # Global search across all menus
         query_lower = query.lower()
-        results = [sr for sr in self._global_index if query_lower in sr.item.title.lower()]
+        results = [
+            sr for sr in self._global_index
+            if query_lower in sr.item.title.lower()
+        ]
         panel.set_search_results(results)
 
     def action_go_back(self) -> None:
         panel = self.query_one(MenuListPanel)
         search = self.query_one(SearchBar)
-        from textual.widgets import Input
-
         inp = search.query_one(Input)
 
         # If search is active (focused or has results), clear it first
-        if inp.has_focus or panel._search_results is not None:
+        if inp.has_focus or panel.is_searching:
             search.clear()
             panel.clear_search()
             panel.focus()
