@@ -35,6 +35,7 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
     "textual-dev>=1.0",
     "pylint>=3.0",
     "black>=24.0",
@@ -51,6 +52,18 @@ Repository = "https://github.com/moraneus/pymenu-cli"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 
+[tool.coverage.run]
+source = ["pymenu_cli"]
+omit = ["pymenu_cli/themes/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+]
+
 [tool.black]
 line-length = 100
 target-version = ["py39"]
@@ -65,4 +78,16 @@ max-line-length = 100
 [dependency-groups]
 dev = [
     "build>=1.4.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pymenu_cli"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "docs/",
+    "tests/",
+    "examples/",
+    ".github/",
+    ".superpowers/",
 ]
