@@ -9,6 +9,10 @@ A Python library for creating interactive terminal user interface (TUI) menus fr
 
 > **v2.0** — Complete rewrite with a modern TUI powered by [Textual](https://textual.textualize.io/). The classic numbered-menu mode is still available via `--classic`.
 
+<p align="center">
+  <img src="docs/screenshots/dark-main-menu.svg" alt="pymenu-cli dark theme" width="800">
+</p>
+
 ## Features
 
 - **Full TUI Application** — Sidebar navigation, breadcrumb trail, action output panel, footer with keybinding hints
@@ -21,27 +25,27 @@ A Python library for creating interactive terminal user interface (TUI) menus fr
 - **Backward Compatible** — Existing v1 JSON files and action modules work unchanged
 - **Python 3.9+** — Modern Python with `pyproject.toml` packaging
 
-## TUI Layout
+## Screenshots
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  HEADER — App title/banner                              │
-├─────────────────────────────────────────────────────────┤
-│  BREADCRUMB — Main Menu › Tools › Settings              │
-├──────────────┬──────────────────────────────────────────┤
-│              │  🔍 Search/filter bar                     │
-│  SIDEBAR     │                                           │
-│  Menu Tree   │  ❯ General Settings          ⚡ action    │
-│              │    Advanced Settings          ⚡ action    │
-│  ▼ Main      │                                           │
-│    ▶ Tools   │──────────────────────────────────────────│
-│      Help    │  OUTPUT PANEL                             │
-│              │  $ open_general_settings()                │
-│              │  ✓ Working directory: /home/user          │
-├──────────────┴──────────────────────────────────────────┤
-│  ↑↓ Navigate   Enter Select   Esc Back   / Search      │
-└─────────────────────────────────────────────────────────┘
-```
+### Submenu Navigation
+<p align="center">
+  <img src="docs/screenshots/dark-submenu.svg" alt="Submenu navigation" width="800">
+</p>
+
+### Action Output
+<p align="center">
+  <img src="docs/screenshots/dark-action-output.svg" alt="Action output panel" width="800">
+</p>
+
+### Global Search
+<p align="center">
+  <img src="docs/screenshots/dark-search.svg" alt="Global search" width="800">
+</p>
+
+### Light Theme
+<p align="center">
+  <img src="docs/screenshots/light-main-menu.svg" alt="Light theme" width="800">
+</p>
 
 ## Installation
 
