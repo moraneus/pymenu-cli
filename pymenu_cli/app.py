@@ -8,14 +8,14 @@ from pathlib import Path
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Footer, Static
+from textual.widgets import Footer, Input, Static
 
 from pymenu_cli.banner import render_banner
-from pymenu_cli.widgets.sidebar import MenuSidebar
-from pymenu_cli.widgets.menu_list import MenuListPanel, SearchResult
 from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
-from pymenu_cli.widgets.search_bar import SearchBar
+from pymenu_cli.widgets.menu_list import MenuListPanel, SearchResult
 from pymenu_cli.widgets.output_panel import OutputPanel
+from pymenu_cli.widgets.search_bar import SearchBar
+from pymenu_cli.widgets.sidebar import MenuSidebar
 
 THEMES_DIR = Path(__file__).parent / "themes"
 
@@ -41,9 +41,10 @@ class MenuApp(App):
         self._menu_stack: list = [menu]
         self._cursor_stack: list[int] = [0]
         self._app_theme = theme
+        self._global_index: list = []
 
     @property
-    def current_menu(self):
+    def current_menu(self) -> object:
         return self._menu_stack[-1]
 
     @property
@@ -86,7 +87,10 @@ class MenuApp(App):
         """Recursively index all items in a menu."""
         current_path = " › ".join(path_parts) if path_parts else menu.title
         for item in menu.items:
-            item_path = f"{current_path} › {item.title}" if path_parts else f"{menu.title} › {item.title}"
+            if path_parts:
+                item_path = f"{current_path} › {item.title}"
+            else:
+                item_path = f"{menu.title} › {item.title}"
             results.append(SearchResult(item, item_path, menu))
             if item.submenu:
                 self._index_menu(item.submenu, path_parts + [menu.title], results)
@@ -128,8 +132,10 @@ class MenuApp(App):
         stderr_capture = io.StringIO()
 
         try:
-            with contextlib.redirect_stdout(stdout_capture), \
-                 contextlib.redirect_stderr(stderr_capture):
+            with (
+                contextlib.redirect_stdout(stdout_capture),
+                contextlib.redirect_stderr(stderr_capture),
+            ):
                 action_fn = getattr(self.current_menu.actions, item.action)
                 action_fn()
 
@@ -188,11 +194,13 @@ class MenuApp(App):
                 self._cursor_stack.pop()
         return False
 
-    def on_breadcrumb_bar_breadcrumb_navigate(self, event: BreadcrumbBar.BreadcrumbNavigate) -> None:
+    def on_breadcrumb_bar_breadcrumb_navigate(
+        self, event: BreadcrumbBar.BreadcrumbNavigate
+    ) -> None:
         level = event.level
         if level < len(self._menu_stack):
-            self._menu_stack = self._menu_stack[:level + 1]
-            self._cursor_stack = self._cursor_stack[:level + 1]
+            self._menu_stack = self._menu_stack[: level + 1]
+            self._cursor_stack = self._cursor_stack[: level + 1]
 
             panel = self.query_one(MenuListPanel)
             panel.set_menu(self.current_menu)
@@ -209,16 +217,14 @@ class MenuApp(App):
             return
         # Global search across all menus
         query_lower = query.lower()
-        results = [
-            sr for sr in self._global_index
-            if query_lower in sr.item.title.lower()
-        ]
+        results = [sr for sr in self._global_index if query_lower in sr.item.title.lower()]
         panel.set_search_results(results)
 
     def action_go_back(self) -> None:
         panel = self.query_one(MenuListPanel)
         search = self.query_one(SearchBar)
         from textual.widgets import Input
+
         inp = search.query_one(Input)
 
         # If search is active (focused or has results), clear it first

@@ -1,5 +1,7 @@
 """Tests for the MenuSidebar widget."""
+
 from textual.app import App, ComposeResult
+
 from pymenu_cli.models.menu import Menu
 from pymenu_cli.models.menu_item import MenuItem
 from pymenu_cli.widgets.sidebar import MenuSidebar

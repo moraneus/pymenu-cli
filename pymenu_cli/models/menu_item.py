@@ -1,4 +1,4 @@
-""" This module defines the MenuItem class, which represents an item in a menu. """
+"""This module defines the MenuItem class, which represents an item in a menu."""
 
 from typing import Optional
 
@@ -15,11 +15,11 @@ class MenuItem:
     """
 
     def __init__(
-            self,
-            i_title: str,
-            i_action: Optional[str] = None,
-            i_submenu: Optional['Menu'] = None,
-            i_color: Optional[dict] = None
+        self,
+        i_title: str,
+        i_action: Optional[str] = None,
+        i_submenu: Optional["Menu"] = None,
+        i_color: Optional[dict] = None,
     ):
         """
         Args:
@@ -64,7 +64,7 @@ class MenuItem:
         return self.__m_action
 
     @property
-    def submenu(self) -> Optional['Menu']:
+    def submenu(self) -> Optional["Menu"]:
         """
         Gets the submenu associated with the menu item.
 

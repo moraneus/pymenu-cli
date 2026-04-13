@@ -1,5 +1,7 @@
 """Tests for the BreadcrumbBar widget."""
+
 from textual.app import App, ComposeResult
+
 from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
 
 

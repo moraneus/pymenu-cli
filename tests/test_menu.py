@@ -2,8 +2,9 @@
 This module contains tests for the Menu and MenuItem classes in the pymenu_cli.models.menu module.
 """
 
+from unittest.mock import Mock, patch
+
 import pytest
-from unittest.mock import patch, Mock
 
 from pymenu_cli.models.menu import Menu
 from pymenu_cli.models.menu_item import MenuItem

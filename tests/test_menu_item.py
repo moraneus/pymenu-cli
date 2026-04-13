@@ -1,5 +1,5 @@
-from pymenu_cli.models.menu_item import MenuItem
 from pymenu_cli.models.menu import Menu
+from pymenu_cli.models.menu_item import MenuItem
 
 
 # Tests for the MenuItem class

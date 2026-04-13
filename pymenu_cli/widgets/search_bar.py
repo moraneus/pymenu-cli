@@ -1,9 +1,9 @@
 """Search/filter bar widget for filtering menu items."""
 
-from textual.containers import Horizontal
-from textual.widgets import Input
-from textual.message import Message
 from textual import on
+from textual.containers import Horizontal
+from textual.message import Message
+from textual.widgets import Input
 
 
 class SearchBar(Horizontal):

@@ -1,8 +1,8 @@
 """Breadcrumb navigation bar widget."""
 
-from textual.widget import Widget
-from textual.message import Message
 from rich.text import Text
+from textual.message import Message
+from textual.widget import Widget
 
 
 class BreadcrumbBar(Widget):

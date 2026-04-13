@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from rich.text import Text
+from textual.containers import Vertical
 from textual.message import Message
 from textual.reactive import reactive
-from textual.containers import Vertical
-from rich.text import Text
 
 
 class SearchResult:
@@ -65,8 +65,7 @@ class MenuListPanel(Vertical, can_focus=True):
         else:
             query = self._filter_query.lower()
             self._filtered_indices = [
-                i for i, item in enumerate(self.menu.items)
-                if query in item.title.lower()
+                i for i, item in enumerate(self.menu.items) if query in item.title.lower()
             ]
         if self._filtered_indices:
             self.cursor_index = min(self.cursor_index, len(self._filtered_indices) - 1)

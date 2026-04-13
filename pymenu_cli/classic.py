@@ -8,12 +8,12 @@ import os
 import sys
 from typing import Optional
 
-from pymenu_cli.ui.styles import Styles, TextColors, BackgroundColors
+from pymenu_cli.ui.styles import BackgroundColors, Styles, TextColors
 
 
 def _clear_screen() -> None:
     """Clear the terminal screen."""
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def classic_display(menu) -> None:
@@ -40,9 +40,9 @@ def classic_display(menu) -> None:
 
         choice = input("\nEnter your choice: ").upper()
 
-        if choice == 'B':
+        if choice == "B":
             return
-        if choice == 'X':
+        if choice == "X":
             sys.exit()
         try:
             index = int(choice) - 1
@@ -62,18 +62,19 @@ def _print_banner(banner: dict) -> None:
     """Print an ASCII art banner using the art library (v1 compat)."""
     try:
         import art
-        banner_text = banner.get('title', '')
-        banner_font = banner.get('font', 'standard')
+
+        banner_text = banner.get("title", "")
+        banner_font = banner.get("font", "standard")
         result = art.text2art(banner_text, font=banner_font, chr_ignore=True)
         print(result)
     except ImportError:
-        print(banner.get('title', ''))
+        print(banner.get("title", ""))
 
 
 def _get_color_string(color: Optional[dict]) -> str:
     """Get the ANSI color string for classic mode display."""
     if color:
-        text_color = getattr(TextColors, color.get('text', 'WHITE').upper())
-        background_color = getattr(BackgroundColors, color.get('background', 'BLACK').upper())
+        text_color = getattr(TextColors, color.get("text", "WHITE").upper())
+        background_color = getattr(BackgroundColors, color.get("background", "BLACK").upper())
         return f"{text_color}{background_color}"
     return ""

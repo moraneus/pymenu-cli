@@ -3,10 +3,12 @@ This module contains tests for the pymenu_cli.pymenu module.
 """
 
 import json
-import pytest
 from unittest.mock import Mock, patch
-from pymenu_cli.pymenu import load_menu, create_menu_from_data, load_actions_module, main
+
+import pytest
+
 from pymenu_cli.models.menu import Menu
+from pymenu_cli.pymenu import create_menu_from_data, load_actions_module, load_menu, main
 
 
 # Tests for load_menu function
@@ -129,7 +131,9 @@ def test_main_with_valid_args(tmp_path, monkeypatch):
         # Mock the argparse.ArgumentParser.parse_args method
         monkeypatch.setattr(
             "argparse.ArgumentParser.parse_args",
-            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=False, theme="dark"),
+            lambda self: Mock(
+                menu=str(menu_file), actions=str(actions_file), classic=False, theme="dark"
+            ),
         )
 
         # Call the main function
@@ -145,8 +149,10 @@ def test_main_with_missing_args():
     when command-line arguments are missing.
     """
     # Mock the argparse.ArgumentParser.parse_args method
-    with patch("argparse.ArgumentParser.parse_args",
-               return_value=Mock(menu=None, actions=None, classic=False, theme="dark")):
+    with patch(
+        "argparse.ArgumentParser.parse_args",
+        return_value=Mock(menu=None, actions=None, classic=False, theme="dark"),
+    ):
         with patch("argparse.ArgumentParser.print_help") as mock_print_help:
             # Call the main function
             main()
@@ -170,7 +176,9 @@ def test_main_with_classic_flag(tmp_path, monkeypatch):
     with patch.object(Menu, "display") as mock_display:
         monkeypatch.setattr(
             "argparse.ArgumentParser.parse_args",
-            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=True, theme="dark"),
+            lambda self: Mock(
+                menu=str(menu_file), actions=str(actions_file), classic=True, theme="dark"
+            ),
         )
         main()
         mock_display.assert_called_once_with(classic=True, theme="dark")
@@ -191,7 +199,9 @@ def test_main_with_theme_flag(tmp_path, monkeypatch):
     with patch.object(Menu, "display") as mock_display:
         monkeypatch.setattr(
             "argparse.ArgumentParser.parse_args",
-            lambda self: Mock(menu=str(menu_file), actions=str(actions_file), classic=False, theme="light"),
+            lambda self: Mock(
+                menu=str(menu_file), actions=str(actions_file), classic=False, theme="light"
+            ),
         )
         main()
         mock_display.assert_called_once_with(classic=False, theme="light")

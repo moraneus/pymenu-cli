@@ -1,6 +1,9 @@
 """Tests for the MenuListPanel widget."""
-from textual.app import App, ComposeResult
+
 from unittest.mock import Mock
+
+from textual.app import App, ComposeResult
+
 from pymenu_cli.models.menu import Menu
 from pymenu_cli.models.menu_item import MenuItem
 from pymenu_cli.widgets.menu_list import MenuListPanel

@@ -2,7 +2,8 @@
 This module defines the Menu class, which represents a text-based menu system.
 """
 
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
+
 from pymenu_cli.models.menu_item import MenuItem
 
 
@@ -28,10 +29,10 @@ class Menu:
         """
         i_config = i_config or {}
         self.__m_title = i_title
-        self.__m_items = i_config.get('items', [])
-        self.__m_actions = i_config.get('actions')
-        self.__m_color = i_config.get('color')
-        self.__m_banner = i_config.get('banner')
+        self.__m_items = i_config.get("items", [])
+        self.__m_actions = i_config.get("actions")
+        self.__m_color = i_config.get("color")
+        self.__m_banner = i_config.get("banner")
 
     @property
     def title(self) -> str:
@@ -100,15 +101,18 @@ class Menu:
         """
         if classic:
             from pymenu_cli.classic import classic_display
+
             classic_display(self)
             return
         from pymenu_cli.app import MenuApp
+
         app = MenuApp(self, theme=theme)
         app.run()
 
     def print_banner(self) -> None:
         """Print the banner. Delegates to classic module."""
         from pymenu_cli.classic import _print_banner
+
         if self.__m_banner:
             _print_banner(self.__m_banner)
 
@@ -116,4 +120,5 @@ class Menu:
     def get_color_string(color) -> str:
         """Get the color string for the given color settings."""
         from pymenu_cli.classic import _get_color_string
+
         return _get_color_string(color)

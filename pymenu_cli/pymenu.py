@@ -3,12 +3,11 @@ This module provides functionality to load and display menus from JSON files,
 and to associate actions defined in a Python module with the menu items.
 """
 
-import sys
-import os
-
 import argparse
 import importlib.util
 import json
+import os
+import sys
 from typing import Dict
 
 # Add the project root directory to the PYTHONPATH
@@ -36,7 +35,7 @@ def load_menu(file_path: str, actions_path: str) -> Menu:
         FileNotFoundError: If the actions Python file is not found.
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             menu_data = json.load(file)
     except FileNotFoundError as exc:
         raise FileNotFoundError(f"Menu JSON file not found: {file_path}") from exc
@@ -63,30 +62,26 @@ def create_menu_from_data(menu_data: Dict, actions: object) -> Menu:
         Menu: The created menu.
     """
     config = {
-        'items': [],
-        'actions': actions,
-        'color': menu_data.get('color'),
-        'banner': menu_data.get('banner')
+        "items": [],
+        "actions": actions,
+        "color": menu_data.get("color"),
+        "banner": menu_data.get("banner"),
     }
 
-    menu = Menu(i_title=menu_data['title'], i_config=config)
+    menu = Menu(i_title=menu_data["title"], i_config=config)
 
-    for item_data in menu_data['items']:
-        if 'submenu' in item_data:
-            submenu = create_menu_from_data(item_data['submenu'], actions)
+    for item_data in menu_data["items"]:
+        if "submenu" in item_data:
+            submenu = create_menu_from_data(item_data["submenu"], actions)
             menu.add_item(
-                MenuItem(
-                    item_data['title'],
-                    i_submenu=submenu,
-                    i_color=item_data.get('color')
-                )
+                MenuItem(item_data["title"], i_submenu=submenu, i_color=item_data.get("color"))
             )
         else:
             menu.add_item(
                 MenuItem(
-                    item_data['title'],
-                    i_action=item_data.get('action'),
-                    i_color=item_data.get('color')
+                    item_data["title"],
+                    i_action=item_data.get("action"),
+                    i_color=item_data.get("color"),
                 )
             )
 
@@ -111,13 +106,21 @@ def load_actions_module(actions_path: str) -> object:
 
 def main() -> None:
     """Main function to parse arguments and display the menu."""
-    parser = argparse.ArgumentParser(description='pymenu-cli - Create interactive CLI menus')
-    parser.add_argument('-m', '--menu', type=str, help='Path to the menu JSON file')
-    parser.add_argument('-a', '--actions', type=str, help='Path to the actions Python file')
-    parser.add_argument('--classic', action='store_true', default=False,
-                        help='Use classic input()-based display mode')
-    parser.add_argument('--theme', choices=['dark', 'light'], default='dark',
-                        help='Color theme for TUI mode (default: dark)')
+    parser = argparse.ArgumentParser(description="pymenu-cli - Create interactive CLI menus")
+    parser.add_argument("-m", "--menu", type=str, help="Path to the menu JSON file")
+    parser.add_argument("-a", "--actions", type=str, help="Path to the actions Python file")
+    parser.add_argument(
+        "--classic",
+        action="store_true",
+        default=False,
+        help="Use classic input()-based display mode",
+    )
+    parser.add_argument(
+        "--theme",
+        choices=["dark", "light"],
+        default="dark",
+        help="Color theme for TUI mode (default: dark)",
+    )
     args = parser.parse_args()
 
     if args.menu and args.actions:
@@ -132,5 +135,5 @@ def main() -> None:
         parser.print_help()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

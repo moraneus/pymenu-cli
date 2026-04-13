@@ -1,5 +1,7 @@
 """Tests for the OutputPanel widget."""
+
 from textual.app import App, ComposeResult
+
 from pymenu_cli.widgets.output_panel import OutputPanel
 
 

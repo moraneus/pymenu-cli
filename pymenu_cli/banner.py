@@ -71,6 +71,7 @@ def _render_box(config: dict) -> Text:
 
 def _render_figlet(config: dict) -> Text:
     import pyfiglet
+
     title = config["title"]
     font = config.get("font", "standard")
     subtitle = config.get("subtitle", "")

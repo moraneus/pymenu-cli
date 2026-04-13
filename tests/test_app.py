@@ -35,6 +35,7 @@ async def test_app_breadcrumb_shows_root():
     app = MenuApp(menu)
     async with app.run_test() as pilot:
         from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
+
         bar = app.query_one(BreadcrumbBar)
         assert "Main Menu" in bar.render_path()
 
@@ -44,6 +45,7 @@ async def test_app_navigate_into_submenu():
     app = MenuApp(menu)
     async with app.run_test() as pilot:
         from pymenu_cli.widgets.menu_list import MenuListPanel
+
         panel = app.query_one(MenuListPanel)
         panel.focus()
         await pilot.press("down")
@@ -51,6 +53,7 @@ async def test_app_navigate_into_submenu():
         await pilot.pause()
 
         from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
+
         bar = app.query_one(BreadcrumbBar)
         path = bar.render_path()
         assert "Settings" in path
@@ -61,6 +64,7 @@ async def test_app_navigate_back():
     app = MenuApp(menu)
     async with app.run_test() as pilot:
         from pymenu_cli.widgets.menu_list import MenuListPanel
+
         panel = app.query_one(MenuListPanel)
         panel.focus()
         await pilot.press("down")
@@ -71,6 +75,7 @@ async def test_app_navigate_back():
         await pilot.pause()
 
         from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
+
         bar = app.query_one(BreadcrumbBar)
         path = bar.render_path()
         assert "Settings" not in path
@@ -89,6 +94,7 @@ async def test_app_action_execution():
     app = MenuApp(menu)
     async with app.run_test() as pilot:
         from pymenu_cli.widgets.menu_list import MenuListPanel
+
         panel = app.query_one(MenuListPanel)
         panel.focus()
         await pilot.press("enter")
@@ -103,8 +109,10 @@ async def test_app_search_focus():
     async with app.run_test() as pilot:
         await pilot.press("slash")
         await pilot.pause()
-        from pymenu_cli.widgets.search_bar import SearchBar
         from textual.widgets import Input
+
+        from pymenu_cli.widgets.search_bar import SearchBar
+
         search = app.query_one(SearchBar)
         inp = search.query_one(Input)
         assert inp.has_focus

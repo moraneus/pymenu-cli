@@ -1,5 +1,7 @@
 """Tests for the SearchBar widget."""
+
 from textual.app import App, ComposeResult
+
 from pymenu_cli.widgets.search_bar import SearchBar
 
 
