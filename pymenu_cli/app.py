@@ -12,7 +12,7 @@ from textual.widgets import Footer, Static
 
 from pymenu_cli.banner import render_banner
 from pymenu_cli.widgets.sidebar import MenuSidebar
-from pymenu_cli.widgets.menu_list import MenuListPanel
+from pymenu_cli.widgets.menu_list import MenuListPanel, SearchResult
 from pymenu_cli.widgets.breadcrumb import BreadcrumbBar
 from pymenu_cli.widgets.search_bar import SearchBar
 from pymenu_cli.widgets.output_panel import OutputPanel
@@ -72,12 +72,40 @@ class MenuApp(App):
         self._update_breadcrumb()
         if self._app_theme == "light":
             self._apply_theme("light")
+        self._global_index = self._build_global_index()
         # Focus the menu list so keyboard navigation works immediately
         self.query_one(MenuListPanel).focus()
+
+    def _build_global_index(self) -> list[SearchResult]:
+        """Build a flat index of all items across the entire menu tree."""
+        results = []
+        self._index_menu(self.root_menu, [], results)
+        return results
+
+    def _index_menu(self, menu, path_parts: list[str], results: list[SearchResult]) -> None:
+        """Recursively index all items in a menu."""
+        current_path = " › ".join(path_parts) if path_parts else menu.title
+        for item in menu.items:
+            item_path = f"{current_path} › {item.title}" if path_parts else f"{menu.title} › {item.title}"
+            results.append(SearchResult(item, item_path, menu))
+            if item.submenu:
+                self._index_menu(item.submenu, path_parts + [menu.title], results)
 
     def _update_breadcrumb(self) -> None:
         path = [m.title for m in self._menu_stack]
         self.query_one(BreadcrumbBar).set_path(path)
+
+    def _navigate_to_menu(self, target_menu) -> None:
+        """Navigate the stack to a specific menu (used by global search)."""
+        self._menu_stack = [self.root_menu]
+        self._cursor_stack = [0]
+        self._find_path_to(self.root_menu, target_menu)
+
+        panel = self.query_one(MenuListPanel)
+        panel.set_menu(self.current_menu)
+        panel.focus()
+        self.query_one(MenuSidebar).set_active(self.current_menu)
+        self._update_breadcrumb()
 
     def _navigate_to(self, menu) -> None:
         panel = self.query_one(MenuListPanel)
@@ -122,6 +150,15 @@ class MenuApp(App):
 
     def on_menu_list_panel_menu_item_selected(self, event: MenuListPanel.MenuItemSelected) -> None:
         item = event.item
+        source_menu = event.menu
+
+        # If this came from a search result, navigate to the item's menu first
+        if source_menu is not None and source_menu is not self.current_menu:
+            self._navigate_to_menu(source_menu)
+            # Clear search after selecting a result
+            self.query_one(SearchBar).clear()
+            self.query_one(MenuListPanel).clear_search()
+
         if item.submenu:
             self._navigate_to(item.submenu)
         elif item.action:
@@ -164,15 +201,31 @@ class MenuApp(App):
             self._update_breadcrumb()
 
     def on_search_bar_search_changed(self, event: SearchBar.SearchChanged) -> None:
-        self.query_one(MenuListPanel).filter_items(event.query)
+        panel = self.query_one(MenuListPanel)
+        query = event.query.strip()
+        if not query:
+            # Clear search — show current menu items
+            panel.clear_search()
+            return
+        # Global search across all menus
+        query_lower = query.lower()
+        results = [
+            sr for sr in self._global_index
+            if query_lower in sr.item.title.lower()
+        ]
+        panel.set_search_results(results)
 
     def action_go_back(self) -> None:
+        panel = self.query_one(MenuListPanel)
         search = self.query_one(SearchBar)
         from textual.widgets import Input
         inp = search.query_one(Input)
-        if inp.has_focus:
+
+        # If search is active (focused or has results), clear it first
+        if inp.has_focus or panel._search_results is not None:
             search.clear()
-            self.query_one(MenuListPanel).focus()
+            panel.clear_search()
+            panel.focus()
             return
 
         if len(self._menu_stack) > 1:
