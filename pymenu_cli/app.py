@@ -72,6 +72,7 @@ class MenuApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
+        """Initialize breadcrumb, theme, and global index on app mount."""
         self._update_breadcrumb()
         if self._app_theme == "light":
             self._apply_theme("light")
@@ -134,8 +135,10 @@ class MenuApp(App):
         stderr_capture = io.StringIO()
 
         try:
-            with contextlib.redirect_stdout(stdout_capture), \
-                 contextlib.redirect_stderr(stderr_capture):
+            with (
+                contextlib.redirect_stdout(stdout_capture),
+                contextlib.redirect_stderr(stderr_capture),
+            ):
                 action_fn = getattr(self.current_menu.actions, item.action)
                 action_fn()
 
@@ -149,18 +152,18 @@ class MenuApp(App):
             if not stdout_text and not stderr_text:
                 output_panel.append_output("✓ Done (no output)")
 
-        except Exception:  # Catch all action errors to display in output panel
+        except Exception:  # pylint: disable=broad-exception-caught
             output_panel.append_error(traceback.format_exc())
         finally:
             self.query_one(MenuListPanel).focus()
 
     def on_menu_list_panel_menu_item_selected(self, event: MenuListPanel.MenuItemSelected) -> None:
+        """Handle a menu item selection from the list panel."""
         item = event.item
         source_menu = event.menu
 
         # If this came from a search result, navigate to the item's menu first
-        if (source_menu is not None
-                and source_menu is not self.current_menu):
+        if source_menu is not None and source_menu is not self.current_menu:
             self._navigate_to_menu(source_menu)
             # Clear search after selecting a result
             self.query_one(SearchBar).clear()
@@ -172,6 +175,7 @@ class MenuApp(App):
             self._execute_action(item)
 
     def on_menu_sidebar_sidebar_item_selected(self, event: MenuSidebar.SidebarItemSelected) -> None:
+        """Handle a sidebar node selection and navigate to the target menu."""
         target_menu = event.menu
         self._menu_stack = [self.root_menu]
         self._cursor_stack = [0]
@@ -196,11 +200,13 @@ class MenuApp(App):
         return False
 
     def on_breadcrumb_bar_breadcrumb_navigate(
-            self, event: BreadcrumbBar.BreadcrumbNavigate) -> None:
+        self, event: BreadcrumbBar.BreadcrumbNavigate
+    ) -> None:
+        """Handle breadcrumb navigation and trim the menu stack to the selected level."""
         level = event.level
         if level < len(self._menu_stack):
-            self._menu_stack = self._menu_stack[:level + 1]
-            self._cursor_stack = self._cursor_stack[:level + 1]
+            self._menu_stack = self._menu_stack[: level + 1]
+            self._cursor_stack = self._cursor_stack[: level + 1]
 
             panel = self.query_one(MenuListPanel)
             panel.set_menu(self.current_menu)
@@ -209,6 +215,7 @@ class MenuApp(App):
             self._update_breadcrumb()
 
     def on_search_bar_search_changed(self, event: SearchBar.SearchChanged) -> None:
+        """Handle search query changes and update the menu list with filtered results."""
         panel = self.query_one(MenuListPanel)
         query = event.query.strip()
         if not query:
@@ -217,13 +224,11 @@ class MenuApp(App):
             return
         # Global search across all menus
         query_lower = query.lower()
-        results = [
-            sr for sr in self._global_index
-            if query_lower in sr.item.title.lower()
-        ]
+        results = [sr for sr in self._global_index if query_lower in sr.item.title.lower()]
         panel.set_search_results(results)
 
     def action_go_back(self) -> None:
+        """Navigate back: clear search if active, otherwise pop the menu stack."""
         panel = self.query_one(MenuListPanel)
         search = self.query_one(SearchBar)
         inp = search.query_one(Input)
@@ -247,9 +252,11 @@ class MenuApp(App):
             self._update_breadcrumb()
 
     def action_focus_search(self) -> None:
+        """Focus the search input bar."""
         self.query_one(SearchBar).focus_input()
 
     def action_toggle_theme(self) -> None:
+        """Toggle between dark and light themes."""
         if self._app_theme == "dark":
             self._apply_theme("light")
         else:

@@ -9,6 +9,8 @@ class BreadcrumbBar(Widget):
     """Displays the navigation path as a breadcrumb trail."""
 
     class BreadcrumbNavigate(Message):
+        """Posted when the user clicks a breadcrumb segment to navigate up."""
+
         def __init__(self, level: int) -> None:
             super().__init__()
             self.level = level
@@ -26,10 +28,12 @@ class BreadcrumbBar(Widget):
         self._path: list[str] = []
 
     def set_path(self, path: list[str]) -> None:
+        """Set the breadcrumb path segments and trigger a re-render."""
         self._path = list(path)
         self.refresh()
 
     def render_path(self) -> str:
+        """Return the breadcrumb path as a plain string joined by › separators."""
         return " › ".join(self._path)
 
     def render(self) -> Text:

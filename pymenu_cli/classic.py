@@ -4,6 +4,7 @@ This module preserves the original pymenu-cli v1.x display behavior.
 Activated via the --classic CLI flag or display(classic=True).
 """
 
+# pylint: disable=import-outside-toplevel
 import os
 import sys
 from typing import Optional

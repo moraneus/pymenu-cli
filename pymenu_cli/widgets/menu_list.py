@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from rich.text import Text
+from textual.containers import Vertical
 from textual.message import Message
 from textual.reactive import reactive
-from textual.containers import Vertical
-from rich.text import Text
 
 
 @dataclass
@@ -28,6 +28,8 @@ class MenuListPanel(Vertical, can_focus=True):
     """
 
     class MenuItemSelected(Message):
+        """Posted when the user selects a menu item."""
+
         def __init__(self, item, menu=None) -> None:
             super().__init__()
             self.item = item
@@ -51,10 +53,12 @@ class MenuListPanel(Vertical, can_focus=True):
 
     @property
     def item_count(self) -> int:
+        """Return the total number of items in the current menu."""
         return len(self.menu.items)
 
     @property
     def visible_item_count(self) -> int:
+        """Return the number of currently visible items (search results or filtered items)."""
         if self._search_results is not None:
             return len(self._search_results)
         return len(self._filtered_indices)
@@ -70,8 +74,7 @@ class MenuListPanel(Vertical, can_focus=True):
         else:
             query = self._filter_query.lower()
             self._filtered_indices = [
-                i for i, item in enumerate(self.menu.items)
-                if query in item.title.lower()
+                i for i, item in enumerate(self.menu.items) if query in item.title.lower()
             ]
         if self._filtered_indices:
             self.cursor_index = min(self.cursor_index, len(self._filtered_indices) - 1)
@@ -99,6 +102,7 @@ class MenuListPanel(Vertical, can_focus=True):
         self.refresh()
 
     def set_menu(self, menu) -> None:
+        """Replace the current menu and reset filter/search state."""
         self.menu = menu
         self._filter_query = ""
         self._search_results = None
@@ -169,22 +173,27 @@ class MenuListPanel(Vertical, can_focus=True):
         return len(self._filtered_indices) - 1
 
     def key_down(self) -> None:
+        """Move the cursor down one item."""
         if self.cursor_index < self._max_index():
             self.cursor_index += 1
             self.refresh()
 
     def key_up(self) -> None:
+        """Move the cursor up one item."""
         if self.cursor_index > 0:
             self.cursor_index -= 1
             self.refresh()
 
     def key_j(self) -> None:
+        """Vim-style alias for key_down."""
         self.key_down()
 
     def key_k(self) -> None:
+        """Vim-style alias for key_up."""
         self.key_up()
 
     def key_enter(self) -> None:
+        """Select the currently highlighted item and post a MenuItemSelected message."""
         selected = self._get_selected_item()
         if selected is None:
             return

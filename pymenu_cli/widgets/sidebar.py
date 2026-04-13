@@ -1,15 +1,18 @@
 """Sidebar widget displaying the menu tree hierarchy."""
 
-from textual.widgets import Tree
+# pylint: disable=import-outside-toplevel
+from textual import on
 from textual.containers import Vertical
 from textual.message import Message
-from textual import on
+from textual.widgets import Tree
 
 
 class MenuSidebar(Vertical):
     """A sidebar that displays the full menu tree."""
 
     class SidebarItemSelected(Message):
+        """Posted when a sidebar menu node is selected."""
+
         def __init__(self, menu) -> None:
             super().__init__()
             self.menu = menu
@@ -42,10 +45,13 @@ class MenuSidebar(Vertical):
                 node.add_leaf(item.title, data=item)
 
     def set_active(self, menu) -> None:
+        """Update the currently active menu reference in the sidebar."""
         self._active_menu = menu
 
     @on(Tree.NodeSelected)
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
+        """Post SidebarItemSelected when a menu node is clicked in the tree."""
         from pymenu_cli.models.menu import Menu  # Lazy import to avoid circular dependency
+
         if isinstance(event.node.data, Menu):
             self.post_message(self.SidebarItemSelected(event.node.data))

@@ -8,6 +8,7 @@ Supports 5 banner styles, all using Rich Text objects:
 - emoji: Emoji icon + styled text
 """
 
+# pylint: disable=import-outside-toplevel
 from __future__ import annotations
 
 from rich.text import Text
